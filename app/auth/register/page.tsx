@@ -40,7 +40,6 @@ const roleOptions = [
 export default function RegisterPage() {
   const router = useRouter();
   const { register: registerUser, isLoading } = useAuthStore();
-  const { closeModal } = useUIStore();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -68,7 +67,6 @@ export default function RegisterPage() {
         role: data.role,
       });
       toast.success('Registration successful! Please check your email to verify your account.');
-      closeModal();
       router.push('/auth/verify-email');
     } catch (error) {
       toast.error('Registration failed. Please try again.');

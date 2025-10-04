@@ -1,161 +1,130 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Select } from '@/components/ui/Select';
-import { Search, MapPin, Zap, TrendingUp, Award } from 'lucide-react';
+import { Search, Dumbbell, MapPin, TrendingUp, Zap } from 'lucide-react';
 
 export function Hero() {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchType, setSearchType] = useState('gyms');
-  const [location, setLocation] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim() || location.trim()) {
-      const params = new URLSearchParams();
-      if (searchQuery.trim()) params.set('q', searchQuery);
-      if (location.trim()) params.set('location', location);
-      params.set('type', searchType);
-      router.push(`/search?${params.toString()}`);
-    }
-  };
+  useEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   return (
-    <section className="relative bg-gradient-to-br from-secondary-950 via-secondary-900 to-secondary-950 py-20 lg:py-32 overflow-hidden">
-      {/* Animated Background Elements */}
+    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-dark-900">
+      {/* Animated background */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary-600/10 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div className="absolute top-40 right-20 w-96 h-96 bg-primary-700/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-20 left-1/4 w-64 h-64 bg-primary-800/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute w-full h-full bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900" />
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute top-20 left-20 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl animate-pulse-slow" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-primary-700/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-primary-800/5 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '2s' }} />
+        </div>
       </div>
 
-      {/* Red glow lines */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-600 to-transparent opacity-50"></div>
-        <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-600 to-transparent opacity-50"></div>
-      </div>
+      {/* Grid pattern overlay */}
+      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center">
+      {/* Content */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-32">
+        <div className={`text-center space-y-8 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
           {/* Badge */}
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary-600/20 border border-primary-600/50 text-primary-400 text-sm font-bold uppercase tracking-wider mb-8 animate-fade-in-down backdrop-blur-sm">
-            <Zap className="w-4 h-4 mr-2 animate-pulse" />
-            Transform Your Body Today
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-600/10 border border-primary-600/30 backdrop-blur-sm animate-fade-in">
+            <Zap className="w-4 h-4 text-primary-500 animate-pulse" />
+            <span className="text-sm font-bold text-primary-400 uppercase tracking-wider">
+              #1 Fitness Platform
+            </span>
           </div>
 
-          {/* Main Title */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 animate-fade-in-up">
-            <span className="block text-white drop-shadow-2xl">UNLEASH YOUR</span>
-            <span className="block text-gradient mt-2 drop-shadow-2xl animate-glow">
-              INNER BEAST
-            </span>
+          {/* Main title */}
+          <h1 className="hero-title animate-slide-up">
+            TRANSFORM YOUR
+            <br />
+            <span className="text-glow animate-glow">BODY & MIND</span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto font-medium leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            Connect with <span className="text-primary-500 font-bold">elite gyms</span> and <span className="text-primary-500 font-bold">world-class trainers</span>.
-            Your transformation starts here.
+          {/* Subtitle */}
+          <p className="hero-subtitle max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            Discover premium gyms and elite personal trainers near you.
+            <br />
+            Start your fitness journey today with <span className="text-primary-500 font-bold">Easy Body</span>
           </p>
 
-          {/* Search Form */}
-          <div className="max-w-4xl mx-auto mb-16 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-            <form onSubmit={handleSearch} className="glass rounded-2xl shadow-2xl p-6 md:p-8 border-2 border-primary-900/30 glow-red-hover">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">
-                    What are you looking for?
-                  </label>
-                  <div className="relative">
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary-500" />
-                    <Input
-                      type="text"
-                      placeholder="Search gyms, trainers, or offers..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-12"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">
-                    Location
-                  </label>
-                  <div className="relative">
-                    <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary-500" />
-                    <Input
-                      type="text"
-                      placeholder="City or ZIP"
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                      className="pl-12"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-bold text-gray-300 mb-2 uppercase tracking-wider">
-                    Type
-                  </label>
-                  <Select
-                    value={searchType}
-                    onChange={(e) => setSearchType(e.target.value)}
-                  >
-                    <option value="gyms">Gyms</option>
-                    <option value="trainers">Trainers</option>
-                    <option value="offers">Offers</option>
-                  </Select>
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full md:w-auto btn-primary btn-lg group"
-              >
-                <Search className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
-                Find Your Match
-              </Button>
-            </form>
+          {/* Stats */}
+          <div className="flex flex-wrap justify-center gap-8 py-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            <div className="text-center">
+              <div className="text-4xl font-black text-primary-500 mb-1">1000+</div>
+              <div className="text-sm text-gray-400 uppercase tracking-wide">Gyms</div>
+            </div>
+            <div className="w-px h-16 bg-dark-700" />
+            <div className="text-center">
+              <div className="text-4xl font-black text-primary-500 mb-1">500+</div>
+              <div className="text-sm text-gray-400 uppercase tracking-wide">Trainers</div>
+            </div>
+            <div className="w-px h-16 bg-dark-700" />
+            <div className="text-center">
+              <div className="text-4xl font-black text-primary-500 mb-1">10K+</div>
+              <div className="text-sm text-gray-400 uppercase tracking-wide">Members</div>
+            </div>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
-            <div className="group relative">
-              <div className="glass rounded-xl p-8 border border-primary-900/30 hover:border-primary-600/50 transition-all duration-300 glow-red-hover">
-                <div className="absolute inset-0 bg-primary-600/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <TrendingUp className="w-12 h-12 text-primary-500 mx-auto mb-4 animate-float" />
-                <div className="text-4xl font-black text-white mb-2">500+</div>
-                <div className="text-gray-400 font-medium uppercase tracking-wider">Partner Gyms</div>
+          {/* Search bar */}
+          <div className="max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: '0.6s' }}>
+            <div className="glass-card p-3 shadow-glow-lg">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex-1 relative">
+                  <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-primary-500 w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder="Enter your location..."
+                    className="w-full h-14 pl-12 pr-4 bg-dark-800 border-2 border-dark-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-primary-600 transition-all duration-300"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                <Button className="btn-primary btn-lg group">
+                  <Search className="w-5 h-5 mr-2 group-hover:rotate-90 transition-transform duration-300" />
+                  Search Now
+                </Button>
               </div>
             </div>
+          </div>
 
-            <div className="group relative">
-              <div className="glass rounded-xl p-8 border border-primary-900/30 hover:border-primary-600/50 transition-all duration-300 glow-red-hover">
-                <div className="absolute inset-0 bg-primary-600/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <Award className="w-12 h-12 text-primary-500 mx-auto mb-4 animate-float" style={{ animationDelay: '0.5s' }} />
-                <div className="text-4xl font-black text-white mb-2">1,200+</div>
-                <div className="text-gray-400 font-medium uppercase tracking-wider">Elite Trainers</div>
-              </div>
+          {/* CTA Buttons */}
+          <div className="flex flex-wrap justify-center gap-4 pt-8 animate-fade-in" style={{ animationDelay: '0.8s' }}>
+            <Link href="/gyms">
+              <Button className="btn-primary btn-lg group">
+                <Dumbbell className="w-5 h-5 mr-2 group-hover:rotate-180 transition-transform duration-500" />
+                Find Gyms
+              </Button>
+            </Link>
+            <Link href="/trainers">
+              <Button className="btn-outline btn-lg group">
+                <TrendingUp className="w-5 h-5 mr-2 group-hover:translate-y-[-4px] transition-transform duration-300" />
+                Find Trainers
+              </Button>
+            </Link>
+          </div>
+
+          {/* Floating elements */}
+          <div className="absolute top-32 left-10 animate-float hidden lg:block">
+            <div className="w-20 h-20 rounded-full bg-primary-600/20 border-4 border-primary-600/40 flex items-center justify-center backdrop-blur-sm">
+              <Dumbbell className="w-10 h-10 text-primary-500" />
             </div>
-
-            <div className="group relative">
-              <div className="glass rounded-xl p-8 border border-primary-900/30 hover:border-primary-600/50 transition-all duration-300 glow-red-hover">
-                <div className="absolute inset-0 bg-primary-600/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <Zap className="w-12 h-12 text-primary-500 mx-auto mb-4 animate-float" style={{ animationDelay: '1s' }} />
-                <div className="text-4xl font-black text-white mb-2">10,000+</div>
-                <div className="text-gray-400 font-medium uppercase tracking-wider">Transformations</div>
-              </div>
+          </div>
+          <div className="absolute bottom-32 right-10 animate-float hidden lg:block" style={{ animationDelay: '1s' }}>
+            <div className="w-24 h-24 rounded-full bg-primary-600/20 border-4 border-primary-600/40 flex items-center justify-center backdrop-blur-sm">
+              <Zap className="w-12 h-12 text-primary-500" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom glow line */}
-      <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary-600 to-transparent"></div>
-    </section>
+      {/* Bottom gradient fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-dark-900 to-transparent" />
+    </div>
   );
 }

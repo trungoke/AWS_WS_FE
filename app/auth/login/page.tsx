@@ -24,7 +24,6 @@ type LoginFormData = z.infer<typeof loginSchema>;
 export default function LoginPage() {
   const router = useRouter();
   const { login, isLoading } = useAuthStore();
-  const { closeModal } = useUIStore();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -39,7 +38,6 @@ export default function LoginPage() {
     try {
       await login(data.email, data.password);
       toast.success('Login successful!');
-      closeModal();
       router.push('/dashboard');
     } catch (error) {
       toast.error('Login failed. Please check your credentials.');
