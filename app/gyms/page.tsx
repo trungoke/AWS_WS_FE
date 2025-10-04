@@ -21,7 +21,7 @@ export default function GymsPage() {
       try {
         const response = await api.gyms.getAll();
         if (response.success && response.data) {
-          setGyms(response.data);
+          setGyms(Array.isArray(response.data) ? response.data : []);
         }
       } catch (error) {
         console.error('Failed to load gyms:', error);
