@@ -145,6 +145,9 @@ export interface Rating {
   updatedAt: string;
 }
 
+// Review Type (alias for Rating, used in gym/trainer pages)
+export type Review = Rating;
+
 // Report Types
 export interface Report {
   id: string;
