@@ -119,11 +119,9 @@ export function OfferCard({ offer, viewMode }: OfferCardProps) {
                   </span>
                 )}
               </div>
-              <Button asChild>
-                <Link href={`/offers/${offer.id}`}>
-                  View Offer
-                </Link>
-              </Button>
+              <Link href={`/offers/${offer.id}`}>
+                <Button>View Offer</Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -197,11 +195,9 @@ export function OfferCard({ offer, viewMode }: OfferCardProps) {
               </div>
             )}
           </div>
-          <Button asChild>
-            <Link href={`/offers/${offer.id}`}>
-              View Offer
-            </Link>
-          </Button>
+          <Link href={`/offers/${offer.id}`}>
+            <Button>View Offer</Button>
+          </Link>
         </div>
       </CardContent>
     </Card>

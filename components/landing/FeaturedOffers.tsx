@@ -111,22 +111,18 @@ export function FeaturedOffers() {
                   </div>
                 </div>
 
-                <Button asChild className="w-full">
-                  <Link href={`/offers/${offer.id}`}>
-                    View Offer
-                  </Link>
-                </Button>
+                <Link href={`/offers/${offer.id}`}>
+                  <Button className="w-full">View Offer</Button>
+                </Link>
               </CardContent>
             </Card>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          <Button asChild size="lg">
-            <Link href="/offers">
-              View All Offers
-            </Link>
-          </Button>
+          <Link href="/offers">
+            <Button size="lg">View All Offers</Button>
+          </Link>
         </div>
       </div>
     </section>

@@ -122,17 +122,17 @@ export function TrainerCard({ trainer }: TrainerCardProps) {
             {/* Actions */}
             <div className="flex items-center justify-between">
               <div className="flex space-x-2">
-                <Button asChild variant="outline" size="sm">
-                  <Link href={`/trainers/${trainer.id}`}>
+                <Link href={`/trainers/${trainer.id}`}>
+                  <Button variant="outline" size="sm">
                     View Profile
-                  </Link>
-                </Button>
-                <Button asChild size="sm">
-                  <Link href={`/trainers/${trainer.id}/book`}>
+                  </Button>
+                </Link>
+                <Link href={`/trainers/${trainer.id}/book`}>
+                  <Button size="sm">
                     <Calendar className="h-4 w-4 mr-1" />
                     Book Session
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
               </div>
               <div className="text-right">
                 <div className="text-2xl font-bold text-primary-600">

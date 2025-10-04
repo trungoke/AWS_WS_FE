@@ -82,16 +82,16 @@ export function GymCard({ gym }: GymCardProps) {
           {/* Actions */}
           <div className="flex items-center justify-between">
             <div className="flex space-x-2">
-              <Button asChild variant="outline" size="sm">
-                <Link href={`/gyms/${gym.id}`}>
+              <Link href={`/gyms/${gym.id}`}>
+                <Button variant="outline" size="sm">
                   View Details
-                </Link>
-              </Button>
-              <Button asChild size="sm">
-                <Link href={`/gyms/${gym.id}/contact`}>
+                </Button>
+              </Link>
+              <Link href={`/gyms/${gym.id}/contact`}>
+                <Button size="sm">
                   Contact
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
             <div className="text-sm text-gray-500">
               Member since {new Date(gym.createdAt).getFullYear()}

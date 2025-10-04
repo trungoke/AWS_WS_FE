@@ -144,9 +144,9 @@ export default function GymDetailPage() {
           <div className="text-center">
             <h1 className="text-2xl font-bold text-white mb-4">Gym not found</h1>
             <p className="text-gray-400 mb-8">The gym you're looking for doesn't exist or has been removed.</p>
-            <Button asChild className="btn-primary">
-              <Link href="/gyms">Browse All Gyms</Link>
-            </Button>
+            <Link href="/gyms">
+              <Button className="btn-primary">Browse All Gyms</Button>
+            </Link>
           </div>
         </div>
         <Footer />
@@ -295,24 +295,24 @@ export default function GymDetailPage() {
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Button asChild className="w-full btn-primary">
-                  <Link href={`/gyms/${gym.id}/book`}>
+                <Link href={`/gyms/${gym.id}/book`} className="block">
+                  <Button className="w-full btn-primary">
                     <Calendar className="h-4 w-4 mr-2" />
                     Book a Visit
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="w-full btn-outline">
-                  <Link href={`/gyms/${gym.id}/offers`}>
+                  </Button>
+                </Link>
+                <Link href={`/gyms/${gym.id}/offers`} className="block">
+                  <Button variant="outline" className="w-full btn-outline">
                     <Award className="h-4 w-4 mr-2" />
                     View Offers
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="w-full btn-outline">
-                  <Link href={`/gyms/${gym.id}/trainers`}>
+                  </Button>
+                </Link>
+                <Link href={`/gyms/${gym.id}/trainers`} className="block">
+                  <Button variant="outline" className="w-full btn-outline">
                     <Users className="h-4 w-4 mr-2" />
                     Find Trainers
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>

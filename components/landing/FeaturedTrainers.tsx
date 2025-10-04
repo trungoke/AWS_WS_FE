@@ -120,11 +120,9 @@ export function FeaturedTrainers() {
                     ${trainer.hourlyRate}
                     <span className="text-sm font-normal text-gray-500">/hour</span>
                   </div>
-                  <Button asChild>
-                    <Link href={`/trainers/${trainer.id}`}>
-                      View Profile
-                    </Link>
-                  </Button>
+                  <Link href={`/trainers/${trainer.id}`}>
+                    <Button>View Profile</Button>
+                  </Link>
                 </div>
               </div>
             </Card>
@@ -132,11 +130,9 @@ export function FeaturedTrainers() {
         </div>
 
         <div className="text-center mt-12">
-          <Button asChild size="lg">
-            <Link href="/trainers">
-              View All Trainers
-            </Link>
-          </Button>
+          <Link href="/trainers">
+            <Button size="lg">View All Trainers</Button>
+          </Link>
         </div>
       </div>
     </section>
