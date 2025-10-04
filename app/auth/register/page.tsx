@@ -46,15 +46,12 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       role: 'CLIENT_USER',
     },
   });
-
-  const selectedRole = watch('role');
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
