@@ -11,9 +11,8 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Eye, EyeOff, Loader2, Dumbbell, Zap, Shield } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Dumbbell } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { UserRole } from '@/types';
 
 const registerSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
