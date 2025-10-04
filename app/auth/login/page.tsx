@@ -178,7 +178,7 @@ export default function LoginPage() {
                   variant="outline"
                   className="w-full btn-outline"
                   onClick={() => {
-                    toast.info('Google OAuth coming soon!');
+                    toast('Google OAuth coming soon!');
                   }}
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -207,7 +207,7 @@ export default function LoginPage() {
                   variant="outline"
                   className="w-full btn-outline"
                   onClick={() => {
-                    toast.info('Facebook OAuth coming soon!');
+                    toast('Facebook OAuth coming soon!');
                   }}
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
