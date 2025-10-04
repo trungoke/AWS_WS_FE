@@ -1,0 +1,42 @@
+{
+  "name": "easy-body-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@aws-amplify/auth": "^6.0.0",
+    "@aws-amplify/core": "^6.0.0",
+    "@hookform/resolvers": "^3.3.2",
+    "@types/node": "^20.8.0",
+    "@types/react": "^18.2.25",
+    "@types/react-dom": "^18.2.11",
+    "@types/uuid": "^10.0.0",
+    "autoprefixer": "^10.4.16",
+    "aws-sdk": "^2.1470.0",
+    "axios": "^1.5.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^2.30.0",
+    "lucide-react": "^0.292.0",
+    "next": "14.0.0",
+    "postcss": "^8.4.31",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.47.0",
+    "react-hot-toast": "^2.4.1",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5.2.2",
+    "uuid": "^13.0.0",
+    "zod": "^3.22.4",
+    "zustand": "^4.4.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.51.0",
+    "eslint-config-next": "14.0.0"
+  }
+}
