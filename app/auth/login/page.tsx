@@ -7,11 +7,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuthStore } from '@/store/authStore';
-import { useUIStore } from '@/store/uiStore';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Dumbbell, LogIn } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const loginSchema = z.object({
@@ -45,16 +44,27 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-dark-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 left-20 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl animate-pulse-slow" />
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-primary-700/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
+      </div>
+
+      <div className="max-w-md w-full space-y-8 relative z-10 animate-fade-in">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Welcome back</h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Sign in to your Easy Body account
+          <div className="flex justify-center mb-4">
+            <div className="h-16 w-16 bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl flex items-center justify-center shadow-glow animate-pulse">
+              <Dumbbell className="text-white h-8 w-8" />
+            </div>
+          </div>
+          <h1 className="text-4xl font-black text-white tracking-tight">WELCOME BACK</h1>
+          <p className="mt-2 text-sm text-gray-400">
+            Sign in to your <span className="text-primary-500 font-bold">Easy Body</span> account
           </p>
         </div>
 
-        <Card>
+        <Card className="animate-scale-in">
           <CardHeader>
             <CardTitle>Sign In</CardTitle>
             <CardDescription>
@@ -64,7 +74,7 @@ export default function LoginPage() {
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
                   Email address
                 </label>
                 <Input
@@ -76,12 +86,12 @@ export default function LoginPage() {
                   className={errors.email ? 'border-red-500' : ''}
                 />
                 {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                  <p className="mt-1 text-sm text-red-400">{errors.email.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
                   Password
                 </label>
                 <div className="relative">
@@ -95,18 +105,18 @@ export default function LoginPage() {
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary-500 transition-colors"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-400" />
+                      <EyeOff className="h-4 w-4" />
                     ) : (
-                      <Eye className="h-4 w-4 text-gray-400" />
+                      <Eye className="h-4 w-4" />
                     )}
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                  <p className="mt-1 text-sm text-red-400">{errors.password.message}</p>
                 )}
               </div>
 
@@ -116,9 +126,9 @@ export default function LoginPage() {
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
-                    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-dark-600 rounded bg-dark-800"
                   />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
                     Remember me
                   </label>
                 </div>
@@ -126,16 +136,16 @@ export default function LoginPage() {
                 <div className="text-sm">
                   <Link
                     href="/auth/forgot-password"
-                    className="font-medium text-primary-600 hover:text-primary-500"
+                    className="font-medium text-primary-500 hover:text-primary-400 transition-colors"
                   >
-                    Forgot your password?
+                    Forgot password?
                   </Link>
                 </div>
               </div>
 
               <Button
                 type="submit"
-                className="w-full btn-primary btn-lg"
+                className="w-full btn-primary btn-lg group"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -144,7 +154,10 @@ export default function LoginPage() {
                     Signing in...
                   </>
                 ) : (
-                  'Sign in'
+                  <>
+                    <LogIn className="mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    Sign in
+                  </>
                 )}
               </Button>
             </form>
@@ -152,10 +165,10 @@ export default function LoginPage() {
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
+                  <div className="w-full border-t border-dark-700" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                  <span className="px-2 bg-dark-900 text-gray-400">Or continue with</span>
                 </div>
               </div>
 
@@ -163,9 +176,8 @@ export default function LoginPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full"
+                  className="w-full btn-outline"
                   onClick={() => {
-                    // TODO: Implement Google OAuth
                     toast.info('Google OAuth coming soon!');
                   }}
                 >
@@ -193,9 +205,8 @@ export default function LoginPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full"
+                  className="w-full btn-outline"
                   onClick={() => {
-                    // TODO: Implement Facebook OAuth
                     toast.info('Facebook OAuth coming soon!');
                   }}
                 >
@@ -208,11 +219,11 @@ export default function LoginPage() {
             </div>
 
             <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-400">
                 Don't have an account?{' '}
                 <Link
                   href="/auth/register"
-                  className="font-medium text-primary-600 hover:text-primary-500"
+                  className="font-bold text-primary-500 hover:text-primary-400 transition-colors"
                 >
                   Sign up here
                 </Link>

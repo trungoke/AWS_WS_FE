@@ -7,12 +7,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuthStore } from '@/store/authStore';
-import { useUIStore } from '@/store/uiStore';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Dumbbell, Zap, Shield } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { UserRole } from '@/types';
 
@@ -74,16 +73,27 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-dark-900 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-20 left-20 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl animate-pulse-slow" />
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-primary-700/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
+      </div>
+
+      <div className="max-w-md w-full space-y-8 relative z-10 animate-fade-in">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Create your account</h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Join Easy Body and start your fitness journey
+          <div className="flex justify-center mb-4">
+            <div className="h-16 w-16 bg-gradient-to-br from-primary-600 to-primary-800 rounded-xl flex items-center justify-center shadow-glow animate-pulse">
+              <Dumbbell className="text-white h-8 w-8" />
+            </div>
+          </div>
+          <h1 className="text-4xl font-black text-white tracking-tight">CREATE ACCOUNT</h1>
+          <p className="mt-2 text-sm text-gray-400">
+            Join <span className="text-primary-500 font-bold">Easy Body</span> and start your fitness journey
           </p>
         </div>
 
-        <Card>
+        <Card className="animate-scale-in">
           <CardHeader>
             <CardTitle>Sign Up</CardTitle>
             <CardDescription>
@@ -94,7 +104,7 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-300 mb-2">
                     First name
                   </label>
                   <Input
@@ -106,12 +116,12 @@ export default function RegisterPage() {
                     className={errors.firstName ? 'border-red-500' : ''}
                   />
                   {errors.firstName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>
+                    <p className="mt-1 text-sm text-red-400">{errors.firstName.message}</p>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-300 mb-2">
                     Last name
                   </label>
                   <Input
@@ -123,13 +133,13 @@ export default function RegisterPage() {
                     className={errors.lastName ? 'border-red-500' : ''}
                   />
                   {errors.lastName && (
-                    <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>
+                    <p className="mt-1 text-sm text-red-400">{errors.lastName.message}</p>
                   )}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
                   Email address
                 </label>
                 <Input
@@ -141,12 +151,12 @@ export default function RegisterPage() {
                   className={errors.email ? 'border-red-500' : ''}
                 />
                 {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                  <p className="mt-1 text-sm text-red-400">{errors.email.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="role" className="block text-sm font-medium text-gray-300 mb-2">
                   Account type
                 </label>
                 <Select
@@ -160,12 +170,12 @@ export default function RegisterPage() {
                   ))}
                 </Select>
                 {errors.role && (
-                  <p className="mt-1 text-sm text-red-600">{errors.role.message}</p>
+                  <p className="mt-1 text-sm text-red-400">{errors.role.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
                   Password
                 </label>
                 <div className="relative">
@@ -179,23 +189,23 @@ export default function RegisterPage() {
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary-500 transition-colors"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-400" />
+                      <EyeOff className="h-4 w-4" />
                     ) : (
-                      <Eye className="h-4 w-4 text-gray-400" />
+                      <Eye className="h-4 w-4" />
                     )}
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                  <p className="mt-1 text-sm text-red-400">{errors.password.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-300 mb-2">
                   Confirm password
                 </label>
                 <div className="relative">
@@ -209,18 +219,18 @@ export default function RegisterPage() {
                   />
                   <button
                     type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary-500 transition-colors"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4 text-gray-400" />
+                      <EyeOff className="h-4 w-4" />
                     ) : (
-                      <Eye className="h-4 w-4 text-gray-400" />
+                      <Eye className="h-4 w-4" />
                     )}
                   </button>
                 </div>
                 {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+                  <p className="mt-1 text-sm text-red-400">{errors.confirmPassword.message}</p>
                 )}
               </div>
 
@@ -230,22 +240,22 @@ export default function RegisterPage() {
                     id="agreeToTerms"
                     type="checkbox"
                     {...register('agreeToTerms')}
-                    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                    className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-dark-600 rounded bg-dark-800"
                   />
                 </div>
                 <div className="ml-3 text-sm">
-                  <label htmlFor="agreeToTerms" className="text-gray-700">
+                  <label htmlFor="agreeToTerms" className="text-gray-300">
                     I agree to the{' '}
-                    <Link href="/terms" className="text-primary-600 hover:text-primary-500">
+                    <Link href="/terms" className="text-primary-500 hover:text-primary-400 font-medium">
                       Terms of Service
                     </Link>{' '}
                     and{' '}
-                    <Link href="/privacy" className="text-primary-600 hover:text-primary-500">
+                    <Link href="/privacy" className="text-primary-500 hover:text-primary-400 font-medium">
                       Privacy Policy
                     </Link>
                   </label>
                   {errors.agreeToTerms && (
-                    <p className="mt-1 text-sm text-red-600">{errors.agreeToTerms.message}</p>
+                    <p className="mt-1 text-sm text-red-400">{errors.agreeToTerms.message}</p>
                   )}
                 </div>
               </div>
@@ -269,10 +279,10 @@ export default function RegisterPage() {
             <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300" />
+                  <div className="w-full border-t border-dark-700" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                  <span className="px-2 bg-dark-900 text-gray-400">Or continue with</span>
                 </div>
               </div>
 
@@ -280,9 +290,8 @@ export default function RegisterPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full"
+                  className="w-full btn-outline"
                   onClick={() => {
-                    // TODO: Implement Google OAuth
                     toast.info('Google OAuth coming soon!');
                   }}
                 >
@@ -310,9 +319,8 @@ export default function RegisterPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full"
+                  className="w-full btn-outline"
                   onClick={() => {
-                    // TODO: Implement Facebook OAuth
                     toast.info('Facebook OAuth coming soon!');
                   }}
                 >
@@ -325,11 +333,11 @@ export default function RegisterPage() {
             </div>
 
             <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-400">
                 Already have an account?{' '}
                 <Link
                   href="/auth/login"
-                  className="font-medium text-primary-600 hover:text-primary-500"
+                  className="font-bold text-primary-500 hover:text-primary-400 transition-colors"
                 >
                   Sign in here
                 </Link>
