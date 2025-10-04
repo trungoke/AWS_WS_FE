@@ -6,7 +6,6 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { GymCard } from '@/components/gyms/GymCard';
 import { GymFilters } from '@/components/gyms/GymFilters';
-import { SearchResults } from '@/components/search/SearchResults';
 import { useSearchStore } from '@/store/searchStore';
 import { Gym } from '@/types';
 import { api } from '@/lib/api';
