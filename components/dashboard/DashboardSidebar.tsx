@@ -15,10 +15,11 @@ import {
   Shield,
   UserCheck,
   FileText,
-  Bell,
   LogOut,
   Menu,
   X,
+  Dumbbell,
+  ChevronRight,
 } from 'lucide-react';
 
 const navigation = {
@@ -68,74 +69,100 @@ export function DashboardSidebar() {
 
   const userNavigation = user ? navigation[user.role] : [];
 
+  const getRoleBadgeColor = () => {
+    switch (user?.role) {
+      case 'ADMIN':
+        return 'from-red-600 to-red-800';
+      case 'GYM_STAFF':
+        return 'from-blue-600 to-blue-800';
+      case 'PT_USER':
+        return 'from-primary-600 to-primary-800';
+      default:
+        return 'from-gray-600 to-gray-800';
+    }
+  };
+
   return (
     <>
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
-        <div className="relative flex-1 flex flex-col max-w-xs w-full bg-white">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
+        <div className="relative flex-1 flex flex-col max-w-xs w-full bg-gradient-to-b from-gray-900 to-black border-r border-primary-600/30">
           <div className="absolute top-0 right-0 -mr-12 pt-2">
             <button
               type="button"
-              className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              className="ml-1 flex items-center justify-center h-10 w-10 rounded-full bg-black/50 backdrop-blur hover:bg-primary-600/20 transition-all"
               onClick={() => setSidebarOpen(false)}
             >
               <X className="h-6 w-6 text-white" />
             </button>
           </div>
-          <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
-            <div className="flex-shrink-0 flex items-center px-4">
-              <div className="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">V</span>
-              </div>
-              <span className="ml-2 text-xl font-bold text-gray-900">Vertex</span>
-            </div>
-            <nav className="mt-5 px-2 space-y-1">
-              {userNavigation.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={cn(
-                      'group flex items-center px-2 py-2 text-base font-medium rounded-md',
-                      isActive
-                        ? 'bg-primary-100 text-primary-900'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                    )}
-                  >
-                    <item.icon
-                      className={cn(
-                        'mr-4 h-6 w-6',
-                        isActive ? 'text-primary-500' : 'text-gray-400 group-hover:text-gray-500'
-                      )}
-                    />
-                    {item.name}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
-          <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
-            <div className="flex items-center">
-              <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                <span className="text-sm font-medium text-primary-600">
-                  {user?.email?.charAt(0).toUpperCase()}
-                </span>
+
+          <div className="flex-shrink-0 flex items-center px-6 py-6 border-b border-primary-600/30">
+            <Link href="/" className="flex items-center group">
+              <div className="relative">
+                <div className="absolute inset-0 bg-primary-600 blur-lg opacity-50" />
+                <div className={`relative h-10 w-10 bg-gradient-to-br ${getRoleBadgeColor()} rounded-xl flex items-center justify-center shadow-neon`}>
+                  <Dumbbell className="text-white h-5 w-5" />
+                </div>
               </div>
               <div className="ml-3">
-                <p className="text-base font-medium text-gray-700">{user?.email}</p>
-                <p className="text-sm font-medium text-gray-500 capitalize">
-                  {user?.role?.toLowerCase().replace('_', ' ')}
-                </p>
+                <div className="flex items-baseline">
+                  <span className="text-xl font-black text-white">VER</span>
+                  <span className="text-xl font-black text-gradient">TEX</span>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            {userNavigation.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={cn(
+                    'group flex items-center justify-between px-4 py-3 text-sm font-bold rounded-xl transition-all duration-300',
+                    isActive
+                      ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-neon'
+                      : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  )}
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <div className="flex items-center">
+                    <item.icon className={cn('h-5 w-5 mr-3 transition-transform', isActive && 'scale-110')} />
+                    <span className="uppercase tracking-wider">{item.name}</span>
+                  </div>
+                  {isActive && <ChevronRight className="h-4 w-4" />}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="flex-shrink-0 border-t border-primary-600/30 p-4">
+            <div className="glass-card rounded-xl p-4 border border-primary-600/30">
+              <div className="flex items-center">
+                <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${getRoleBadgeColor()} flex items-center justify-center shadow-neon`}>
+                  <span className="text-lg font-black text-white">
+                    {user?.firstName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <div className="ml-3 flex-1">
+                  <p className="text-sm font-bold text-white truncate">{user?.email}</p>
+                  <p className="text-xs font-bold text-primary-400 uppercase tracking-wider">
+                    {user?.role?.replace('_', ' ')}
+                  </p>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-red-600/20 transition-all"
+                  title="Logout"
+                >
+                  <LogOut className="h-5 w-5" />
+                </button>
               </div>
             </div>
-            <button
-              onClick={handleLogout}
-              className="ml-auto p-2 text-gray-400 hover:text-gray-600"
-            >
-              <LogOut className="h-5 w-5" />
-            </button>
           </div>
         </div>
       </div>
@@ -143,65 +170,97 @@ export function DashboardSidebar() {
       {/* Desktop sidebar */}
       <div className="hidden lg:flex lg:flex-shrink-0">
         <div className="flex flex-col w-64">
-          <div className="flex flex-col h-0 flex-1 border-r border-gray-200 bg-white">
-            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-              <div className="flex items-center flex-shrink-0 px-4">
-                <div className="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">EB</span>
-                </div>
-                <span className="ml-2 text-xl font-bold text-gray-900">Easy Body</span>
+          <div className="flex flex-col h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 border-r border-primary-600/30 relative overflow-hidden">
+            <div className="absolute inset-0 bg-mesh opacity-10" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600/5 rounded-full blur-3xl" />
+
+            <div className="relative z-10 flex flex-col h-full">
+              <div className="flex-shrink-0 flex items-center px-6 py-6 border-b border-primary-600/30">
+                <Link href="/" className="flex items-center group">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-primary-600 blur-lg opacity-50 group-hover:opacity-70 transition-opacity" />
+                    <div className={`relative h-10 w-10 bg-gradient-to-br ${getRoleBadgeColor()} rounded-xl flex items-center justify-center shadow-neon group-hover:shadow-neon-lg transition-all duration-300 group-hover:scale-110`}>
+                      <Dumbbell className="text-white h-5 w-5 group-hover:rotate-180 transition-transform duration-500" />
+                    </div>
+                  </div>
+                  <div className="ml-3">
+                    <div className="flex items-baseline">
+                      <span className="text-xl font-black text-white">VER</span>
+                      <span className="text-xl font-black text-gradient">TEX</span>
+                    </div>
+                  </div>
+                </Link>
               </div>
-              <nav className="mt-5 flex-1 px-2 space-y-1">
-                {userNavigation.map((item) => {
+
+              <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-primary-600/50 scrollbar-track-transparent">
+                {userNavigation.map((item, index) => {
                   const isActive = pathname === item.href;
                   return (
                     <Link
                       key={item.name}
                       href={item.href}
                       className={cn(
-                        'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
+                        'group flex items-center justify-between px-4 py-3 text-sm font-bold rounded-xl transition-all duration-300 animate-fade-in-up',
                         isActive
-                          ? 'bg-primary-100 text-primary-900'
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                          ? 'bg-gradient-to-r from-primary-600 to-primary-700 text-white shadow-neon scale-105'
+                          : 'text-gray-400 hover:text-white hover:bg-white/5 hover:scale-102'
                       )}
+                      style={{ animationDelay: `${index * 0.05}s` }}
                     >
-                      <item.icon
-                        className={cn(
-                          'mr-3 h-5 w-5',
-                          isActive ? 'text-primary-500' : 'text-gray-400 group-hover:text-gray-500'
-                        )}
-                      />
-                      {item.name}
+                      <div className="flex items-center">
+                        <item.icon
+                          className={cn(
+                            'h-5 w-5 mr-3 transition-all duration-300',
+                            isActive ? 'scale-110' : 'group-hover:scale-110'
+                          )}
+                        />
+                        <span className="uppercase tracking-wider">{item.name}</span>
+                      </div>
+                      {isActive && <ChevronRight className="h-4 w-4 animate-pulse" />}
                     </Link>
                   );
                 })}
               </nav>
-            </div>
-            <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
-              <div className="flex items-center w-full">
-                <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                  <span className="text-sm font-medium text-primary-600">
-                    {user?.email?.charAt(0).toUpperCase()}
-                  </span>
+
+              <div className="flex-shrink-0 border-t border-primary-600/30 p-4">
+                <div className="glass-card rounded-xl p-4 border border-primary-600/30 hover:border-primary-600/60 transition-all duration-300 group">
+                  <div className="flex items-center">
+                    <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${getRoleBadgeColor()} flex items-center justify-center shadow-neon group-hover:scale-110 transition-transform duration-300`}>
+                      <span className="text-lg font-black text-white">
+                        {user?.firstName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="ml-3 flex-1 min-w-0">
+                      <p className="text-sm font-bold text-white truncate">{user?.email}</p>
+                      <p className="text-xs font-bold text-primary-400 uppercase tracking-wider">
+                        {user?.role?.replace('_', ' ')}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-red-600/20 transition-all group-hover:scale-110"
+                      title="Logout"
+                    >
+                      <LogOut className="h-5 w-5" />
+                    </button>
+                  </div>
                 </div>
-                <div className="ml-3 flex-1">
-                  <p className="text-sm font-medium text-gray-700 truncate">{user?.email}</p>
-                  <p className="text-xs font-medium text-gray-500 capitalize">
-                    {user?.role?.toLowerCase().replace('_', ' ')}
-                  </p>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  className="ml-2 p-2 text-gray-400 hover:text-gray-600"
-                  title="Sign out"
-                >
-                  <LogOut className="h-4 w-4" />
-                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile menu button */}
+      <div className="lg:hidden fixed top-4 left-4 z-40">
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="p-3 rounded-xl glass-card border border-primary-600/30 text-white hover:bg-primary-600/20 transition-all shadow-neon"
+        >
+          <Menu className="h-6 w-6" />
+        </button>
+      </div>
     </>
   );
 }
+

@@ -215,3 +215,4 @@ export function OfferFilters({ onSearch }: OfferFiltersProps) {
     </div>
   );
 }
+

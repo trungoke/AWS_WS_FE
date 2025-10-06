@@ -3,102 +3,200 @@ import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { Star, MapPin, Clock, Phone, Globe, Heart } from 'lucide-react';
+import { Star, MapPin, Clock, Phone, Globe, Heart, Building2, ArrowRight } from 'lucide-react';
 import { Gym } from '@/types';
 
 interface GymCardProps {
   gym: Gym;
+  viewMode?: 'grid' | 'list';
 }
 
-export function GymCard({ gym }: GymCardProps) {
-  // Note: Operating hours not available in current API structure
-  const getOperatingStatus = () => {
-    return 'Open today 6:00 AM - 10:00 PM'; // Placeholder
-  };
+export function GymCard({ gym, viewMode }: GymCardProps) {
+  // Use placeholder images since Gym type doesn't have imageUrls
+  const defaultImage = '/api/placeholder/400/300';
+  const images = [defaultImage];
 
+  if (viewMode === 'list') {
+    return (
+      <div className="group perspective-1000 animate-fade-in-up">
+        <div className="glass-card rounded-3xl overflow-hidden shadow-3d-lg group-hover:shadow-neon border border-primary-600/20 group-hover:border-primary-600/50 transform-3d transition-all duration-700 hover:scale-[1.02] hover:-translate-y-2">
+          {/* Animated glow border */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 via-primary-700 to-primary-600 rounded-3xl opacity-0 group-hover:opacity-30 blur-xl transition duration-700" />
+
+          <div className="flex flex-col md:flex-row">
+            {/* Image Section with Parallax */}
+            <div className="md:w-80 flex-shrink-0 relative overflow-hidden">
+              <div className="relative h-64 md:h-full">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-10" />
+                <img
+                  src={images[0] || '/api/placeholder/400/300'}
+                  alt={gym.name}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+
+                {/* Floating Rating Badge */}
+                <div className="absolute top-6 left-6 z-20">
+                  <div className="glass-card px-4 py-2 rounded-xl border border-yellow-500/50 shadow-glow">
+                    <div className="flex items-center gap-2">
+                      <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                      <span className="text-yellow-400 font-black">{gym.averageRating}</span>
+                      <span className="text-gray-400 text-xs">({gym.totalRatings})</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Heart Button */}
+                <div className="absolute top-6 right-6 z-20">
+                  <button className="w-12 h-12 glass-card rounded-xl flex items-center justify-center border border-primary-600/30 hover:border-primary-600 hover:shadow-glow transition-all duration-300 group/heart">
+                    <Heart className="w-5 h-5 text-primary-500 group-hover/heart:scale-125 group-hover/heart:text-primary-400 transition-all duration-300" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Content Section */}
+            <div className="flex-1 p-8 relative">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-3xl font-black text-white mb-2 group-hover:text-gradient transition-all duration-300">
+                    {gym.name}
+                  </h3>
+                  <div className="flex items-center text-gray-400 mb-3 group-hover:text-gray-300 transition-colors">
+                    <MapPin className="h-5 w-5 mr-2 text-primary-500" />
+                    <span className="font-medium">{gym.address}</span>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className="text-3xl font-black text-gradient">
+                    $89
+                  </div>
+                  <div className="text-sm text-gray-500 font-bold uppercase tracking-wider">per month</div>
+                </div>
+              </div>
+
+              <p className="text-gray-500 mb-6 leading-relaxed group-hover:text-gray-400 transition-colors">
+                {gym.description}
+              </p>
+
+              {/* Amenities Pills */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {['Parking', 'Locker Rooms', 'Showers', 'Sauna'].map((amenity, i) => (
+                  <span
+                    key={amenity}
+                    className="text-xs px-3 py-1 rounded-full bg-primary-600/10 text-primary-400 border border-primary-600/30 font-bold uppercase tracking-wider hover:bg-primary-600/20 hover:scale-110 transition-all duration-300"
+                    style={{ animationDelay: `${i * 0.1}s` }}
+                  >
+                    {amenity}
+                  </span>
+                ))}
+                <span className="text-xs px-3 py-1 rounded-full bg-dark-700/50 text-gray-400 border border-dark-600 font-bold">
+                  +5 more
+                </span>
+              </div>
+
+              {/* CTA Button */}
+              <Link href={`/gyms/${gym.id}`}>
+                <Button className="btn-primary shadow-glow group/btn relative overflow-hidden">
+                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
+                  <Building2 className="w-5 h-5 mr-2 relative z-10 group-hover/btn:rotate-12 transition-transform duration-300" />
+                  <span className="relative z-10 font-bold">VIEW DETAILS</span>
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Grid View
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
-        {/* Image */}
-        <div className="md:col-span-1">
-          <div className="aspect-w-16 aspect-h-9 relative">
-            <Image
-              src="/api/placeholder/400/300"
+    <div className="group perspective-1000 animate-fade-in-up">
+      <div className="glass-card rounded-3xl overflow-hidden shadow-3d-lg group-hover:shadow-neon border border-primary-600/20 group-hover:border-primary-600/50 transform-3d transition-all duration-700 hover:scale-105 hover:-translate-y-6">
+        {/* Animated glow border */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 via-primary-700 to-primary-600 rounded-3xl opacity-0 group-hover:opacity-30 blur-xl transition duration-700" />
+
+        {/* Image with Epic Effects */}
+        <div className="relative overflow-hidden">
+          <div className="aspect-w-16 aspect-h-12 relative">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+            <img
+              src={images[0] || '/api/placeholder/400/300'}
               alt={gym.name}
-              fill
-              className="object-cover rounded-lg"
+              className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
             />
-            <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-sm hover:bg-gray-50">
-              <Heart className="h-4 w-4 text-gray-600" />
+          </div>
+
+          {/* Floating Rating Badge */}
+          <div className="absolute top-6 left-6 z-20">
+            <div className="glass-card px-4 py-2 rounded-xl border border-yellow-500/50 shadow-glow">
+              <div className="flex items-center gap-2">
+                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                <span className="text-yellow-400 font-black">{gym.averageRating}</span>
+                <span className="text-gray-400 text-xs">({gym.totalRatings})</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Heart Button */}
+          <div className="absolute top-6 right-6 z-20">
+            <button className="w-12 h-12 glass-card rounded-xl flex items-center justify-center border border-primary-600/30 hover:border-primary-600 hover:shadow-glow transition-all duration-300 group/heart">
+              <Heart className="w-5 h-5 text-primary-500 group-hover/heart:scale-125 group-hover/heart:text-primary-400 transition-all duration-300" />
             </button>
           </div>
         </div>
 
         {/* Content */}
-        <div className="md:col-span-2">
-          <div className="flex items-start justify-between mb-2">
-            <h3 className="text-xl font-semibold text-gray-900">{gym.name}</h3>
-            <div className="flex items-center text-yellow-500">
-              <Star className="h-4 w-4 fill-current" />
-              <span className="ml-1 text-sm font-medium">{gym.averageRating || 0}</span>
-              <span className="ml-1 text-sm text-gray-500">({gym.totalRatings || 0})</span>
-            </div>
+        <CardContent className="p-8">
+          <h3 className="text-2xl font-black text-white mb-3 group-hover:text-gradient transition-all duration-300">
+            {gym.name}
+          </h3>
+
+          <div className="flex items-center text-gray-400 mb-4 group-hover:text-gray-300 transition-colors">
+            <MapPin className="h-4 w-4 mr-2 text-primary-500" />
+            <span className="text-sm font-medium">{gym.address}</span>
           </div>
 
-          <div className="flex items-center text-gray-600 mb-2">
-            <MapPin className="h-4 w-4 mr-1" />
-            <span className="text-sm">
-              {gym.address}, {gym.city}, {gym.state} {gym.postalCode}
-            </span>
-          </div>
-
-          <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+          <p className="text-gray-500 text-sm mb-6 line-clamp-3 group-hover:text-gray-400 transition-colors">
             {gym.description}
           </p>
 
-          {/* Contact Info */}
-          <div className="flex items-center space-x-4 mb-4 text-sm text-gray-600">
-            {gym.phoneNumber && (
-              <div className="flex items-center">
-                <Phone className="h-4 w-4 mr-1" />
-                <span>{gym.phoneNumber}</span>
-              </div>
-            )}
-            {gym.website && (
-              <div className="flex items-center">
-                <Globe className="h-4 w-4 mr-1" />
-                <a 
-                  href={gym.website} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:text-primary-600"
-                >
-                  Website
-                </a>
-              </div>
-            )}
+          {/* Amenities */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            {['Parking', 'Showers', 'Sauna'].map((amenity, i) => (
+              <span
+                key={amenity}
+                className="text-xs px-3 py-1 rounded-full bg-primary-600/10 text-primary-400 border border-primary-600/30 font-bold uppercase tracking-wider hover:bg-primary-600/20 hover:scale-110 transition-all duration-300"
+                style={{ animationDelay: `${i * 0.1}s` }}
+              >
+                {amenity}
+              </span>
+            ))}
+            <span className="text-xs px-3 py-1 rounded-full bg-dark-700/50 text-gray-400 border border-dark-600 font-bold">
+              +6
+            </span>
           </div>
 
-          {/* Actions */}
+          {/* Price and CTA */}
           <div className="flex items-center justify-between">
-            <div className="flex space-x-2">
-              <Link href={`/gyms/${gym.id}`}>
-                <Button variant="outline" size="sm">
-                  View Details
-                </Button>
-              </Link>
-              <Link href={`/gyms/${gym.id}/contact`}>
-                <Button size="sm">
-                  Contact
-                </Button>
-              </Link>
+            <div>
+              <div className="text-3xl font-black text-gradient">
+                $89
+              </div>
+              <div className="text-xs text-gray-500 font-bold uppercase tracking-wider">per month</div>
             </div>
-            <div className="text-sm text-gray-500">
-              Member since {new Date(gym.createdAt).getFullYear()}
-            </div>
+
+            <Link href={`/gyms/${gym.id}`}>
+              <Button className="btn-primary shadow-glow group/btn relative overflow-hidden">
+                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
+                <span className="relative z-10 font-bold">VIEW DETAILS</span>
+                <ArrowRight className="w-4 h-4 ml-2 relative z-10 group-hover/btn:translate-x-1 transition-transform duration-300" />
+              </Button>
+            </Link>
           </div>
-        </div>
+        </CardContent>
       </div>
-    </Card>
+    </div>
   );
 }

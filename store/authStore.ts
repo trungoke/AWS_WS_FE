@@ -46,37 +46,45 @@ export const useAuthStore = create<AuthState>()(
       login: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
-          const result = await cognito.signIn(email, password);
-          
-          if (result.success && result.data) {
-            // Register user in backend if not already registered
-            try {
-              await api.auth.register({
-                email: result.data.user.email,
-                firstName: result.data.user.firstName,
-                lastName: result.data.user.lastName,
-                phoneNumber: result.data.user.phoneNumber,
-                role: result.data.user.role,
-                profileImageUrl: result.data.user.profileImageUrl,
-              });
-            } catch (error) {
-              // User might already be registered, continue
-              console.log('User registration check:', error);
+          // Call Backend API instead of Cognito
+          const response = await api.auth.login(email, password);
+
+          if (response.success && response.data) {
+            const { user, token } = response.data as any;
+
+            // Save token to localStorage
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('auth_token', token);
             }
             
-            set({ 
-              user: result.data.user, 
-              isAuthenticated: true, 
+            // Set user in store
+            set({
+              user: {
+                id: user.id.toString(),
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                phoneNumber: user.phoneNumber,
+                role: user.role, // This will be ADMIN, GYM_STAFF, PT_USER, or CLIENT_USER
+                profileImageUrl: user.profileImageUrl,
+                createdAt: user.createdAt || new Date().toISOString(),
+                updatedAt: user.updatedAt || new Date().toISOString(),
+              },
+              isAuthenticated: true,
               isLoading: false 
             });
+
+            console.log('✅ Login successful! User role:', user.role);
           } else {
-            throw new Error(result.error || 'Login failed');
+            throw new Error(response.error || 'Login failed');
           }
         } catch (error) {
-          set({ 
+          console.error('❌ Login error:', error);
+          set({
             error: error instanceof Error ? error.message : 'Login failed',
             isLoading: false 
           });
+          throw error;
         }
       },
 
@@ -97,27 +105,90 @@ export const useAuthStore = create<AuthState>()(
       register: async (userData: any) => {
         set({ isLoading: true, error: null });
         try {
-          const result = await cognito.signUp(userData.email, userData.password, {
+          // Call Backend API to register
+          const response = await api.auth.register({
+            email: userData.email,
+            password: userData.password,
             firstName: userData.firstName,
             lastName: userData.lastName,
             phoneNumber: userData.phoneNumber,
             role: userData.role,
           });
           
-          if (result.success) {
-            set({ 
-              isLoading: false,
-              error: null
-            });
-            // User needs to confirm email before being authenticated
+          if (response.success && response.data) {
+            const data = response.data as any;
+
+            // Check if backend returns token
+            if (data.token) {
+              // Backend returns token - save directly
+              const { user, token } = data;
+
+              if (typeof window !== 'undefined') {
+                localStorage.setItem('auth_token', token);
+              }
+
+              set({
+                user: {
+                  id: user.id.toString(),
+                  email: user.email,
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  phoneNumber: user.phoneNumber,
+                  role: user.role,
+                  profileImageUrl: user.profileImageUrl,
+                  createdAt: user.createdAt || new Date().toISOString(),
+                  updatedAt: user.updatedAt || new Date().toISOString(),
+                },
+                isAuthenticated: true,
+                isLoading: false
+              });
+
+              console.log('✅ Registration successful! User role:', user.role);
+            } else {
+              // Backend doesn't return token - auto login
+              console.log('⚠️ Token not returned, auto-logging in...');
+
+              // Call login API
+              const loginResponse = await api.auth.login(userData.email, userData.password);
+
+              if (loginResponse.success && loginResponse.data) {
+                const { user, token } = loginResponse.data as any;
+
+                if (typeof window !== 'undefined') {
+                  localStorage.setItem('auth_token', token);
+                }
+
+                set({
+                  user: {
+                    id: user.id.toString(),
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    phoneNumber: user.phoneNumber,
+                    role: user.role,
+                    profileImageUrl: user.profileImageUrl,
+                    createdAt: user.createdAt || new Date().toISOString(),
+                    updatedAt: user.updatedAt || new Date().toISOString(),
+                  },
+                  isAuthenticated: true,
+                  isLoading: false
+                });
+
+                console.log('✅ Auto-login successful! User role:', user.role);
+              } else {
+                throw new Error('Auto-login failed after registration');
+              }
+            }
           } else {
-            throw new Error(result.error || 'Registration failed');
+            throw new Error(response.error || 'Registration failed');
           }
         } catch (error) {
-          set({ 
+          console.error('❌ Registration error:', error);
+          set({
             error: error instanceof Error ? error.message : 'Registration failed',
             isLoading: false 
           });
+          throw error;
         }
       },
 

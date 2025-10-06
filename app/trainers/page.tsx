@@ -8,210 +8,250 @@ import { TrainerCard } from '@/components/trainers/TrainerCard';
 import { TrainerFilters } from '@/components/trainers/TrainerFilters';
 import { useSearchStore } from '@/store/searchStore';
 import { PersonalTrainer } from '@/types';
+import { Grid, List, Filter, Users, Zap, Star, Award } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import { cn } from '@/lib/utils';
 
-// Mock data - in real app, this would come from API
+// Enhanced mock data
 const mockTrainers: PersonalTrainer[] = [
-  {
-    id: '1',
-    userId: '1',
-    firstName: 'Sarah',
-    lastName: 'Johnson',
-    phoneNumber: '(555) 123-4567',
-    profileImageUrl: '/api/placeholder/200/200',
-    bio: 'Passionate about helping clients achieve their fitness goals through personalized training programs. I specialize in weight loss, strength training, and nutrition guidance.',
-    specialties: ['Weight Loss', 'Strength Training', 'Nutrition', 'Cardio Training'],
-    certifications: ['NASM-CPT', 'Precision Nutrition', 'CPR/AED'],
-    experience: 8,
-    hourlyRate: 85,
-    averageRating: 4.9,
-    totalRatings: 87,
-    availability: [
-      { id: '1', dayOfWeek: 1, startTime: '06:00', endTime: '20:00', isAvailable: true },
-      { id: '2', dayOfWeek: 2, startTime: '06:00', endTime: '20:00', isAvailable: true },
-      { id: '3', dayOfWeek: 3, startTime: '06:00', endTime: '20:00', isAvailable: true },
-      { id: '4', dayOfWeek: 4, startTime: '06:00', endTime: '20:00', isAvailable: true },
-      { id: '5', dayOfWeek: 5, startTime: '06:00', endTime: '20:00', isAvailable: true },
-      { id: '6', dayOfWeek: 6, startTime: '08:00', endTime: '16:00', isAvailable: true },
-      { id: '7', dayOfWeek: 0, startTime: '09:00', endTime: '15:00', isAvailable: true },
-    ],
-    attachedGyms: ['1', '2'],
-    isActive: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: '2',
-    userId: '2',
-    firstName: 'Mike',
-    lastName: 'Chen',
-    phoneNumber: '(555) 987-6543',
-    profileImageUrl: '/api/placeholder/200/200',
-    bio: 'Former competitive athlete with 12 years of experience in strength and conditioning. I specialize in athletic performance, Olympic lifting, and injury prevention.',
-    specialties: ['Athletic Performance', 'Olympic Lifting', 'Injury Prevention', 'Sports Training'],
-    certifications: ['CSCS', 'USAW Level 1', 'FMS Level 1'],
-    experience: 12,
-    hourlyRate: 95,
-    averageRating: 4.7,
-    totalRatings: 64,
-    availability: [
-      { id: '8', dayOfWeek: 1, startTime: '05:00', endTime: '19:00', isAvailable: true },
-      { id: '9', dayOfWeek: 2, startTime: '05:00', endTime: '19:00', isAvailable: true },
-      { id: '10', dayOfWeek: 3, startTime: '05:00', endTime: '19:00', isAvailable: true },
-      { id: '11', dayOfWeek: 4, startTime: '05:00', endTime: '19:00', isAvailable: true },
-      { id: '12', dayOfWeek: 5, startTime: '05:00', endTime: '19:00', isAvailable: true },
-      { id: '13', dayOfWeek: 6, startTime: '07:00', endTime: '15:00', isAvailable: true },
-      { id: '14', dayOfWeek: 0, startTime: '08:00', endTime: '14:00', isAvailable: true },
-    ],
-    attachedGyms: ['2', '3'],
-    isActive: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: '3',
-    userId: '3',
-    firstName: 'Emma',
-    lastName: 'Rodriguez',
-    phoneNumber: '(555) 456-7890',
-    profileImageUrl: '/api/placeholder/200/200',
-    bio: 'Holistic approach to fitness focusing on mind-body connection and sustainable wellness practices. I specialize in yoga, pilates, meditation, and stress management.',
-    specialties: ['Yoga', 'Pilates', 'Meditation', 'Stress Management', 'Flexibility'],
-    certifications: ['RYT-500', 'PMA-CPT', 'Yin Yoga Certification'],
-    experience: 6,
-    hourlyRate: 75,
-    averageRating: 4.8,
-    totalRatings: 92,
-    availability: [
-      { id: '15', dayOfWeek: 1, startTime: '07:00', endTime: '19:00', isAvailable: true },
-      { id: '16', dayOfWeek: 2, startTime: '07:00', endTime: '19:00', isAvailable: true },
-      { id: '17', dayOfWeek: 3, startTime: '07:00', endTime: '19:00', isAvailable: true },
-      { id: '18', dayOfWeek: 4, startTime: '07:00', endTime: '19:00', isAvailable: true },
-      { id: '19', dayOfWeek: 5, startTime: '07:00', endTime: '19:00', isAvailable: true },
-      { id: '20', dayOfWeek: 6, startTime: '08:00', endTime: '16:00', isAvailable: true },
-      { id: '21', dayOfWeek: 0, startTime: '09:00', endTime: '15:00', isAvailable: true },
-    ],
-    attachedGyms: ['3'],
-    isActive: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
-  },
+	{
+		id: '1',
+		userId: '1',
+		firstName: 'Sarah',
+		lastName: 'Johnson',
+		phoneNumber: '+1 (555) 123-4567',
+		bio: 'Certified personal trainer with 8+ years of experience specializing in weight loss, strength training, and nutrition coaching. Passionate about helping clients achieve their fitness goals through personalized programs.',
+		profileImageUrl: '/api/placeholder/300/300',
+		specialties: ['Weight Loss', 'Strength Training', 'Nutrition Coaching', 'HIIT'],
+		certifications: ['NASM-CPT', 'Precision Nutrition Level 1', 'TRX Certified'],
+		experience: 8,
+		hourlyRate: 85.0,
+		averageRating: 4.9,
+		totalRatings: 127,
+		availability: [
+			{ id: '1', dayOfWeek: 1, startTime: '06:00', endTime: '20:00', isAvailable: true },
+			{ id: '2', dayOfWeek: 2, startTime: '06:00', endTime: '20:00', isAvailable: true },
+			{ id: '3', dayOfWeek: 3, startTime: '06:00', endTime: '20:00', isAvailable: true },
+		],
+		attachedGyms: ['1', '2'],
+		isActive: true,
+		createdAt: '2024-01-01T00:00:00Z',
+		updatedAt: '2024-01-01T00:00:00Z',
+	},
+	{
+		id: '2',
+		userId: '2',
+		firstName: 'Mike',
+		lastName: 'Rodriguez',
+		phoneNumber: '+1 (555) 987-6543',
+		bio: 'Elite strength & conditioning coach with Olympic lifting expertise. Former competitive athlete helping clients reach peak performance through scientific training methods.',
+		profileImageUrl: '/api/placeholder/300/300',
+		specialties: ['Olympic Lifting', 'Powerlifting', 'Athletic Performance', 'Injury Prevention'],
+		certifications: ['CSCS', 'USAW Level 2', 'FMS Certified'],
+		experience: 12,
+		hourlyRate: 120.0,
+		averageRating: 4.8,
+		totalRatings: 89,
+		availability: [
+			{ id: '4', dayOfWeek: 1, startTime: '05:00', endTime: '18:00', isAvailable: true },
+			{ id: '5', dayOfWeek: 3, startTime: '05:00', endTime: '18:00', isAvailable: true },
+			{ id: '6', dayOfWeek: 5, startTime: '05:00', endTime: '18:00', isAvailable: true },
+		],
+		attachedGyms: ['1'],
+		isActive: true,
+		createdAt: '2024-01-01T00:00:00Z',
+		updatedAt: '2024-01-01T00:00:00Z',
+	},
+	{
+		id: '3',
+		userId: '3',
+		firstName: 'Emma',
+		lastName: 'Chen',
+		phoneNumber: '+1 (555) 456-7890',
+		bio: 'Holistic wellness coach specializing in yoga, pilates, and mindfulness practices. Creating balanced fitness journeys for mind, body, and spirit.',
+		profileImageUrl: '/api/placeholder/300/300',
+		specialties: ['Yoga', 'Pilates', 'Meditation', 'Flexibility Training'],
+		certifications: ['RYT-500', 'PMA-CPT', 'Mindfulness Coach'],
+		experience: 6,
+		hourlyRate: 75.0,
+		averageRating: 4.7,
+		totalRatings: 92,
+		availability: [
+			{ id: '7', dayOfWeek: 2, startTime: '07:00', endTime: '19:00', isAvailable: true },
+			{ id: '8', dayOfWeek: 4, startTime: '07:00', endTime: '19:00', isAvailable: true },
+			{ id: '9', dayOfWeek: 6, startTime: '08:00', endTime: '16:00', isAvailable: true },
+		],
+		attachedGyms: ['2', '3'],
+		isActive: true,
+		createdAt: '2024-01-01T00:00:00Z',
+		updatedAt: '2024-01-01T00:00:00Z',
+	},
 ];
 
 export default function TrainersPage() {
-  const searchParams = useSearchParams();
-  const { searchResults, isLoading, searchTrainers } = useSearchStore();
-  const [trainers, setTrainers] = useState<PersonalTrainer[]>(mockTrainers);
-  const [showFilters, setShowFilters] = useState(false);
+	const searchParams = useSearchParams();
+	const { searchResults, isLoading, searchTrainers } = useSearchStore();
+	const [trainers, setTrainers] = useState<PersonalTrainer[]>(mockTrainers);
+	const [showFilters, setShowFilters] = useState(false);
+	const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  useEffect(() => {
-    // In a real app, this would trigger an API call based on search params
-    const query = searchParams.get('q');
-    const location = searchParams.get('location');
-    
-    if (query || location) {
-      // Filter mock data based on search params
-      let filteredTrainers = mockTrainers;
-      
-      if (query) {
-        filteredTrainers = filteredTrainers.filter(trainer => 
-          trainer.firstName.toLowerCase().includes(query.toLowerCase()) ||
-          trainer.lastName.toLowerCase().includes(query.toLowerCase()) ||
-          trainer.bio.toLowerCase().includes(query.toLowerCase()) ||
-          trainer.specialties.some(specialty => 
-            specialty.toLowerCase().includes(query.toLowerCase())
-          )
-        );
-      }
-      
-      // Location filtering would require additional location data
-      // For now, just use the query filter
+	useEffect(() => {
+		const query = searchParams.get('q');
+		const specialty = searchParams.get('specialty');
 
-      setTrainers(filteredTrainers);
-    }
-  }, [searchParams]);
+		if (query || specialty) {
+			let filteredTrainers = mockTrainers;
 
-  const handleSearch = async (filters: any) => {
-    // In a real app, this would call the API
-    await searchTrainers(filters);
-  };
+			if (query) {
+				filteredTrainers = filteredTrainers.filter((trainer) =>
+					`${trainer.firstName} ${trainer.lastName}`
+						.toLowerCase()
+						.includes(query.toLowerCase()) ||
+					trainer.bio.toLowerCase().includes(query.toLowerCase()) ||
+					trainer.specialties.some((spec) => spec.toLowerCase().includes(query.toLowerCase()))
+				);
+			}
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Find Your Perfect Personal Trainer
-          </h1>
-          <p className="text-lg text-gray-600">
-            Connect with certified professionals who are passionate about your success
-          </p>
-        </div>
+			if (specialty) {
+				filteredTrainers = filteredTrainers.filter((trainer) =>
+					trainer.specialties.some((spec) => spec.toLowerCase().includes(specialty.toLowerCase()))
+				);
+			}
 
-        {/* Filters and Search */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-900">
-              {trainers.length} trainers found
-            </h2>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="btn btn-outline btn-md"
-            >
-              {showFilters ? 'Hide' : 'Show'} Filters
-            </button>
-          </div>
+			setTrainers(filteredTrainers);
+		}
+	}, [searchParams]);
 
-          {showFilters && (
-            <TrainerFilters onSearch={handleSearch} />
-          )}
-        </div>
+	const handleSearch = async (filters: any) => {
+		await searchTrainers(filters);
+	};
 
-        {/* Results */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Trainer List */}
-          <div className="lg:col-span-2">
-            {isLoading ? (
-              <div className="space-y-4">
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} className="bg-white rounded-lg p-6 animate-pulse">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-16 h-16 bg-gray-200 rounded-full"></div>
-                      <div className="flex-1 space-y-2">
-                        <div className="h-4 bg-gray-200 rounded w-1/3"></div>
-                        <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                        <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-6">
-                {trainers.map((trainer) => (
-                  <TrainerCard key={trainer.id} trainer={trainer} />
-                ))}
-              </div>
-            )}
-          </div>
+	return (
+		<div className="min-h-screen bg-black">
+			<Header />
 
-          {/* Map Placeholder */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg p-6 shadow-sm sticky top-8">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Map View
-              </h3>
-              <div className="bg-gray-200 rounded-lg h-96 flex items-center justify-center">
-                <p className="text-gray-500">Interactive map coming soon</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
+			{/* Epic Hero Section for Trainers */}
+			<section className="relative py-32 bg-black overflow-hidden">
+				{/* Background with animated elements */}
+				<div className="absolute inset-0 bg-mesh opacity-40" />
+				<div className="absolute inset-0">
+					<div className="absolute top-20 right-20 w-[600px] h-[600px] bg-primary-600/10 rounded-full blur-[150px] animate-float" />
+					<div className="absolute bottom-20 left-20 w-[500px] h-[500px] bg-primary-700/10 rounded-full blur-[140px] animate-float" style={{ animationDelay: '1s' }} />
+				</div>
 
-      <Footer />
-    </div>
-  );
+				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+					<div className="text-center mb-16 animate-fade-in-up">
+						<div className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card border border-primary-600/30 mb-8">
+							<Users className="w-5 h-5 text-primary-500 animate-pulse" />
+							<span className="text-sm font-black text-white uppercase tracking-wider">
+                Elite <span className="text-gradient">Professionals</span>
+              </span>
+						</div>
+
+						<h1 className="text-6xl md:text-8xl font-black text-white mb-6 tracking-tight">
+              TOP <span className="text-neon">TRAINERS</span>
+            </h1>
+						<p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Connect with <span className="text-primary-400 font-bold">certified experts</span> who will guide you to extraordinary results and unlock your true potential
+            </p>
+					</div>
+				</div>
+			</section>
+
+			{/* Main Content */}
+			<main className="relative bg-black">
+				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+					{/* Enhanced Controls Bar */}
+					<div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12">
+						<div className="flex items-center gap-4">
+							<h2 className="text-2xl font-black text-white">
+                Found <span className="text-gradient">{trainers.length}</span> Elite Trainers
+              </h2>
+							<div className="glass-card px-4 py-2 rounded-xl border border-green-500/50 shadow-glow">
+								<div className="flex items-center gap-2">
+									<div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+									<span className="text-sm text-green-400 font-bold">
+                  {trainers.filter((t) => t.isActive).length} Available Now
+                </span>
+								</div>
+							</div>
+						</div>
+
+						<div className="flex items-center gap-4">
+							{/* View Mode Toggle with 3D effect */}
+							<div className="flex rounded-xl glass-card border border-dark-700/50 p-1">
+								<Button
+									variant={viewMode === 'grid' ? 'default' : 'ghost'}
+									size="sm"
+									onClick={() => setViewMode('grid')}
+									className="rounded-lg"
+								>
+									<Grid className="w-4 h-4" />
+								</Button>
+								<Button
+									variant={viewMode === 'list' ? 'default' : 'ghost'}
+									size="sm"
+									onClick={() => setViewMode('list')}
+									className="rounded-lg"
+								>
+									<List className="w-4 h-4" />
+								</Button>
+							</div>
+
+							{/* Filter Toggle */}
+							<Button
+								variant="outline"
+								onClick={() => setShowFilters(!showFilters)}
+								className="gap-2"
+							>
+								<Filter className="w-4 h-4" />
+                Filters
+              </Button>
+						</div>
+					</div>
+
+					{/* Filters Panel */}
+					{showFilters && (
+						<div className="mb-12 animate-fade-in-up">
+							<TrainerFilters onSearch={handleSearch} />
+						</div>
+					)}
+
+					{/* Trainers Grid với Epic 3D Effects */}
+					<div className={cn(
+						"gap-8 animate-fade-in-up",
+						viewMode === 'grid'
+							? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+							: "flex flex-col space-y-6"
+					)}>
+						{trainers.map((trainer, index) => (
+							<div
+								key={trainer.id}
+								className="perspective-1000"
+								style={{ animationDelay: `${index * 0.1}s` }}
+							>
+								<TrainerCard trainer={trainer} />
+							</div>
+						))}
+					</div>
+
+					{/* Load More Button */}
+					<div className="text-center mt-16 animate-fade-in-up">
+						<Button className="btn-primary btn-lg px-16 py-4 shadow-neon group relative overflow-hidden">
+							<div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+							<Users className="w-5 h-5 mr-3 relative z-10 group-hover:scale-125 transition-transform duration-300" />
+							<span className="relative z-10 font-black">DISCOVER MORE TRAINERS</span>
+
+							{/* Epic shine effect */}
+							<div className="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent transform translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+						</Button>
+					</div>
+				</div>
+			</main>
+
+			<Footer />
+		</div>
+	);
 }
+

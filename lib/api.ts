@@ -127,8 +127,12 @@ const apiClient = new ApiClient();
 
 // 🔐 Authentication API
 export const authApi = {
+  login: (email: string, password: string) =>
+    apiClient.post('/auth/login', { email, password }),
   register: (data: any) => apiClient.post('/auth/register', data),
   me: () => apiClient.get('/auth/me'),
+  changePassword: (currentPassword: string, newPassword: string) =>
+    apiClient.post('/auth/change-password', { currentPassword, newPassword }),
 };
 
 // 🏢 Gym API
@@ -149,7 +153,7 @@ export const gymApi = {
 };
 
 // 💪 PT User API
-export const ptUserApi = {
+export const ptApi = {
   create: (data: any) => apiClient.post('/pt-users', data),
   update: (ptUserId: string, data: any) => apiClient.put(`/pt-users/${ptUserId}`, data),
   getById: (ptUserId: string) => apiClient.get(`/pt-users/${ptUserId}`),
@@ -163,12 +167,13 @@ export const offerApi = {
   create: (data: any) => apiClient.post('/offers', data),
   update: (offerId: string, data: any) => apiClient.put(`/offers/${offerId}`, data),
   getById: (offerId: string) => apiClient.get(`/offers/${offerId}`),
+  getAll: (params?: any) => apiClient.get('/offers', { params }),
 };
 
 // 🔍 Search API
 export const searchApi = {
-  searchOffers: (data: any) => apiClient.post('/search/offers', data),
-  searchOffersQuery: (params: any) => apiClient.get('/search/offers', { params }),
+  offers: (data: any) => apiClient.post('/search/offers', data),
+  offersQuery: (params: any) => apiClient.get('/search/offers', { params }),
 };
 
 // ⭐ Rating API
@@ -185,35 +190,27 @@ export const reportApi = {
 
 // 👨‍💼 Admin API
 export const adminApi = {
-  getPendingOffers: (params?: any) =>
-    apiClient.get('/admin/offers/pending', { params }),
-  moderateOffer: (offerId: string, data: { decision: 'approve' | 'reject', reason?: string }) =>
-    apiClient.put(`/admin/offers/${offerId}/moderate`, data),
-  getPendingReports: (params?: any) =>
-    apiClient.get('/admin/reports/pending', { params }),
-  getReportsByStatus: (params?: any) =>
-    apiClient.get('/admin/reports', { params }),
-  resolveReport: (reportId: string, data?: any) =>
-    apiClient.put(`/admin/reports/${reportId}/resolve`, data),
-  dismissReport: (reportId: string, data?: any) =>
-    apiClient.put(`/admin/reports/${reportId}/dismiss`, data),
-  getPendingPTAssociations: (params?: any) =>
-    apiClient.get('/admin/pt-associations/pending', { params }),
+  getPendingOffers: () => apiClient.get('/admin/offers/pending'),
+  moderateOffer: (offerId: string, decision: 'approve' | 'reject', reason?: string) =>
+    apiClient.put(`/admin/offers/${offerId}/moderate`, { decision, reason }),
+  getPendingReports: () => apiClient.get('/admin/reports/pending'),
+  getReports: (status?: string) => apiClient.get('/admin/reports', { params: { status } }),
+  resolveReport: (reportId: string) => apiClient.put(`/admin/reports/${reportId}/resolve`),
+  dismissReport: (reportId: string) => apiClient.put(`/admin/reports/${reportId}/dismiss`),
+  getPendingPTAssociations: () => apiClient.get('/admin/pt-associations/pending'),
 };
 
 // 📸 Media API
 export const mediaApi = {
   getPresignedUrl: (folder: string, fileExtension: string) =>
-    apiClient.get('/media/presigned-url', {
-      params: { folder, fileExtension }
-    }),
+    apiClient.get('/media/presigned-url', { params: { folder, fileExtension } }),
 };
 
-// Export unified API object
+// Main API object
 export const api = {
   auth: authApi,
   gyms: gymApi,
-  ptUsers: ptUserApi,
+  pt: ptApi,
   offers: offerApi,
   search: searchApi,
   ratings: ratingApi,

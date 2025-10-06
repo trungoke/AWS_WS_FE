@@ -269,3 +269,4 @@ export function GymFilters({ onSearch }: GymFiltersProps) {
     </div>
   );
 }
+

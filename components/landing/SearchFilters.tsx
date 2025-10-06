@@ -11,7 +11,8 @@ import {
   Star, 
   Clock, 
   Filter,
-  X
+  X,
+  Search
 } from 'lucide-react';
 
 interface SearchFiltersProps {
@@ -149,222 +150,305 @@ export function SearchFilters({ className = '' }: SearchFiltersProps) {
   ];
 
   return (
-    <section className={`py-16 bg-white ${className}`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Find Exactly What You're Looking For
+    <section className={`py-24 bg-black relative overflow-hidden ${className}`}>
+      {/* Background with 3D Grid */}
+      <div className="absolute inset-0 bg-mesh opacity-40" />
+      <div className="absolute inset-0" style={{
+        backgroundImage: `
+          linear-gradient(rgba(220, 38, 38, 0.1) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(220, 38, 38, 0.1) 1px, transparent 1px)
+        `,
+        backgroundSize: '40px 40px',
+        transform: 'perspective(1000px) rotateX(20deg)',
+        transformOrigin: 'center top'
+      }} />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="text-center mb-16 animate-fade-in-up">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-primary-600/30 mb-6">
+            <Filter className="w-4 h-4 text-primary-500" />
+            <span className="text-sm font-bold text-primary-400 uppercase tracking-wider">Advanced Search</span>
+          </div>
+          <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tight">
+            Find <span className="text-gradient">Exactly</span> What You're
+            <br />
+            Looking For
           </h2>
-          <p className="text-lg text-gray-600">
-            Use our advanced filters to narrow down your search and find the perfect match
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            Use our <span className="text-primary-400 font-bold">AI-powered filters</span> to narrow down your search and find the perfect match for your fitness goals
           </p>
         </div>
 
-        <div className="bg-gray-50 rounded-2xl p-6 md:p-8">
-          {/* Basic Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Location
-              </label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <Input
-                  type="text"
-                  placeholder="City or ZIP code"
-                  value={filters.location}
-                  onChange={(e) => handleFilterChange('location', e.target.value)}
-                  className="pl-10"
-                />
+        <div className="relative perspective-2000">
+          <div className="glass-card p-8 md:p-12 shadow-3d-lg border border-primary-600/20 rounded-3xl transform-3d hover:scale-[1.02] transition-all duration-500">
+            {/* Glowing border effect */}
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-primary-600 via-primary-700 to-primary-600 rounded-3xl opacity-20 animate-border-flow" />
+
+            {/* Basic Filters Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div className="group">
+                <label className="block text-sm font-bold text-gray-300 mb-3 uppercase tracking-wider">
+                  <MapPin className="inline w-4 h-4 mr-2 text-primary-500" />
+                  Location
+                </label>
+                <div className="relative">
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-primary-600 to-primary-800 rounded-xl opacity-0 group-hover:opacity-30 blur transition duration-300" />
+                  <div className="relative">
+                    <MapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary-500" />
+                    <input
+                      type="text"
+                      placeholder="City or ZIP code"
+                      value={filters.location}
+                      onChange={(e) => handleFilterChange('location', e.target.value)}
+                      className="input pl-12"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="group">
+                <label className="block text-sm font-bold text-gray-300 mb-3 uppercase tracking-wider">
+                  Radius
+                </label>
+                <div className="relative">
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-primary-600 to-primary-800 rounded-xl opacity-0 group-hover:opacity-30 blur transition duration-300" />
+                  <select
+                    value={filters.radius}
+                    onChange={(e) => handleFilterChange('radius', e.target.value)}
+                    className="input appearance-none cursor-pointer"
+                  >
+                    <option value="5">5 miles</option>
+                    <option value="10">10 miles</option>
+                    <option value="25">25 miles</option>
+                    <option value="50">50 miles</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="group">
+                <label className="block text-sm font-bold text-gray-300 mb-3 uppercase tracking-wider">
+                  <DollarSign className="inline w-4 h-4 mr-2 text-primary-500" />
+                  Min Price
+                </label>
+                <div className="relative">
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-primary-600 to-primary-800 rounded-xl opacity-0 group-hover:opacity-30 blur transition duration-300" />
+                  <div className="relative">
+                    <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary-500" />
+                    <input
+                      type="number"
+                      placeholder="0"
+                      value={filters.minPrice}
+                      onChange={(e) => handleFilterChange('minPrice', e.target.value)}
+                      className="input pl-12"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="group">
+                <label className="block text-sm font-bold text-gray-300 mb-3 uppercase tracking-wider">
+                  <DollarSign className="inline w-4 h-4 mr-2 text-primary-500" />
+                  Max Price
+                </label>
+                <div className="relative">
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-primary-600 to-primary-800 rounded-xl opacity-0 group-hover:opacity-30 blur transition duration-300" />
+                  <div className="relative">
+                    <DollarSign className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary-500" />
+                    <input
+                      type="number"
+                      placeholder="1000"
+                      value={filters.maxPrice}
+                      onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
+                      className="input pl-12"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Radius
-              </label>
-              <Select
-                value={filters.radius}
-                onChange={(e) => handleFilterChange('radius', e.target.value)}
+            {/* Advanced Filters Toggle */}
+            <div className="flex justify-center mb-8">
+              <Button
+                variant="outline"
+                onClick={() => setShowAdvanced(!showAdvanced)}
+                className="btn-outline group px-8 py-4 text-base"
               >
-                <option value="5">5 miles</option>
-                <option value="10">10 miles</option>
-                <option value="25">25 miles</option>
-                <option value="50">50 miles</option>
-              </Select>
+                <Filter className="mr-3 h-5 w-5 group-hover:rotate-180 transition-transform duration-500" />
+                {showAdvanced ? 'Hide' : 'Show'} Advanced Filters
+                <div className="ml-3 w-2 h-2 rounded-full bg-primary-500 animate-pulse" />
+              </Button>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Min Price
-              </label>
-              <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <Input
-                  type="number"
-                  placeholder="0"
-                  value={filters.minPrice}
-                  onChange={(e) => handleFilterChange('minPrice', e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Max Price
-              </label>
-              <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <Input
-                  type="number"
-                  placeholder="1000"
-                  value={filters.maxPrice}
-                  onChange={(e) => handleFilterChange('maxPrice', e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Advanced Filters Toggle */}
-          <div className="flex justify-center mb-6">
-            <Button
-              variant="outline"
-              onClick={() => setShowAdvanced(!showAdvanced)}
-              className="flex items-center"
-            >
-              <Filter className="mr-2 h-4 w-4" />
-              {showAdvanced ? 'Hide' : 'Show'} Advanced Filters
-            </Button>
-          </div>
-
-          {/* Advanced Filters */}
-          {showAdvanced && (
-            <div className="space-y-6">
-              {/* Rating Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Minimum Rating
-                </label>
-                <div className="flex items-center space-x-2">
-                  <Star className="h-5 w-5 text-yellow-400" />
-                  <Select
-                    value={filters.minRating}
-                    onChange={(e) => handleFilterChange('minRating', e.target.value)}
-                  >
-                    <option value="">Any rating</option>
-                    <option value="1">1+ stars</option>
-                    <option value="2">2+ stars</option>
-                    <option value="3">3+ stars</option>
-                    <option value="4">4+ stars</option>
-                    <option value="5">5 stars only</option>
-                  </Select>
-                </div>
-              </div>
-
-              {/* Availability Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Availability
-                </label>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <Select
-                    value={filters.availability.dayOfWeek}
-                    onChange={(e) => handleAvailabilityChange('dayOfWeek', e.target.value)}
-                  >
-                    {dayOptions.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
+            {/* Advanced Filters with 3D Animation */}
+            {showAdvanced && (
+              <div className="space-y-8 animate-fade-in-up">
+                {/* Rating Filter */}
+                <div className="group">
+                  <label className="block text-lg font-bold text-white mb-4 uppercase tracking-wider">
+                    <Star className="inline w-5 h-5 mr-2 text-yellow-500" />
+                    Minimum Rating
+                  </label>
+                  <div className="flex items-center space-x-4">
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                      <button
+                        key={rating}
+                        onClick={() => handleFilterChange('minRating', rating.toString())}
+                        className={`flex items-center gap-2 px-4 py-3 rounded-xl transition-all duration-300 ${
+                          filters.minRating === rating.toString()
+                            ? 'glass-card border border-primary-600 shadow-glow text-primary-400'
+                            : 'glass border border-dark-700/50 text-gray-400 hover:border-primary-600/50 hover:text-primary-400'
+                        }`}
+                      >
+                        <Star className="w-4 h-4" />
+                        <span className="font-bold">{rating}+</span>
+                      </button>
                     ))}
-                  </Select>
-                  <div className="relative">
-                    <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <Input
-                      type="time"
-                      placeholder="Start time"
-                      value={filters.availability.startTime}
-                      onChange={(e) => handleAvailabilityChange('startTime', e.target.value)}
-                      className="pl-10"
-                    />
-                  </div>
-                  <div className="relative">
-                    <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                    <Input
-                      type="time"
-                      placeholder="End time"
-                      value={filters.availability.endTime}
-                      onChange={(e) => handleAvailabilityChange('endTime', e.target.value)}
-                      className="pl-10"
-                    />
                   </div>
                 </div>
-              </div>
 
-              {/* Amenities Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Amenities
-                </label>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                  {amenityOptions.map(amenity => (
-                    <label key={amenity} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={filters.amenities.includes(amenity)}
-                        onChange={() => handleAmenityToggle(amenity)}
-                        className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                {/* Availability Filter */}
+                <div>
+                  <label className="block text-lg font-bold text-white mb-4 uppercase tracking-wider">
+                    Availability
+                  </label>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Select
+                      value={filters.availability.dayOfWeek}
+                      onChange={(e) => handleAvailabilityChange('dayOfWeek', e.target.value)}
+                      className="glass-card"
+                    >
+                      {dayOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </Select>
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary-500" />
+                      <Input
+                        type="time"
+                        placeholder="Start time"
+                        value={filters.availability.startTime}
+                        onChange={(e) => handleAvailabilityChange('startTime', e.target.value)}
+                        className="input pl-10 glass-card"
                       />
-                      <span className="ml-2 text-sm text-gray-700">{amenity}</span>
-                    </label>
-                  ))}
+                    </div>
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-primary-500" />
+                      <Input
+                        type="time"
+                        placeholder="End time"
+                        value={filters.availability.endTime}
+                        onChange={(e) => handleAvailabilityChange('endTime', e.target.value)}
+                        className="input pl-10 glass-card"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Amenities Filter with 3D Cards */}
+                <div>
+                  <label className="block text-lg font-bold text-white mb-4 uppercase tracking-wider">
+                    Amenities
+                  </label>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {amenityOptions.map((amenity, index) => (
+                      <div
+                        key={amenity}
+                        className="group perspective-1000"
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                      >
+                        <label className="block cursor-pointer transform-3d transition-all duration-500 hover:scale-105">
+                          <input
+                            type="checkbox"
+                            checked={filters.amenities.includes(amenity)}
+                            onChange={() => handleAmenityToggle(amenity)}
+                            className="sr-only"
+                          />
+                          <div className={`glass-card p-4 rounded-xl border-2 transition-all duration-300 ${
+                            filters.amenities.includes(amenity)
+                              ? 'border-primary-600 shadow-glow text-primary-400 bg-primary-600/10'
+                              : 'border-dark-700/50 text-gray-400 hover:border-primary-600/50 hover:text-primary-400'
+                          }`}>
+                            <div className="text-center">
+                              <div className="text-sm font-bold uppercase tracking-wider">{amenity}</div>
+                            </div>
+                          </div>
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Specialties Filter */}
+                <div>
+                  <label className="block text-lg font-bold text-white mb-4 uppercase tracking-wider">
+                    Specialties
+                  </label>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {specialtyOptions.map((specialty, index) => (
+                      <div
+                        key={specialty}
+                        className="group perspective-1000"
+                        style={{ animationDelay: `${index * 0.1}s` }}
+                      >
+                        <label className={`block cursor-pointer transform-3d transition-all duration-500 hover:scale-105 ${
+                          filters.specialties.includes(specialty) ? 'hover:rotate-y-12' : 'hover:rotate-y-6'
+                        }`}>
+                          <input
+                            type="checkbox"
+                            checked={filters.specialties.includes(specialty)}
+                            onChange={() => handleSpecialtyToggle(specialty)}
+                            className="sr-only"
+                          />
+                          <div className={`glass-card p-4 rounded-xl border-2 transition-all duration-300 ${
+                            filters.specialties.includes(specialty)
+                              ? 'border-primary-600 shadow-glow text-primary-400 bg-primary-600/10'
+                              : 'border-dark-700/50 text-gray-400 hover:border-primary-600/50 hover:text-primary-400'
+                          }`}>
+                            <div className="text-center">
+                              <div className="text-sm font-bold uppercase tracking-wider">{specialty}</div>
+                            </div>
+                          </div>
+                        </label>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
+            )}
 
-              {/* Specialties Filter */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Specialties
-                </label>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                  {specialtyOptions.map(specialty => (
-                    <label key={specialty} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={filters.specialties.includes(specialty)}
-                        onChange={() => handleSpecialtyToggle(specialty)}
-                        className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                      />
-                      <span className="ml-2 text-sm text-gray-700">{specialty}</span>
-                    </label>
-                  ))}
+            {/* Action Buttons with 3D Effects */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center mt-12">
+              <Button
+                onClick={handleSearch}
+                className="btn-primary btn-lg group px-12 py-4 text-lg shadow-neon-lg relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-400 to-primary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <Search className="w-6 h-6 mr-3 relative z-10 group-hover:rotate-90 transition-transform duration-300" />
+                <span className="relative z-10 font-black">SEARCH NOW</span>
+                <div className="w-6 h-6 ml-3 relative z-10">
+                  <div className="absolute inset-0 bg-white rounded-full scale-0 group-hover:scale-100 transition-transform duration-300" />
+                  <Search className="w-6 h-6 text-primary-700 relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
-              </div>
+              </Button>
+
+              <Button
+                onClick={clearFilters}
+                variant="outline"
+                className="btn-outline btn-lg group px-12 py-4 text-lg"
+              >
+                <X className="w-6 h-6 mr-3 group-hover:rotate-180 transition-transform duration-500" />
+                <span className="font-bold">Clear Filters</span>
+              </Button>
             </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Button
-              onClick={handleSearch}
-              size="lg"
-              className="btn-primary btn-lg"
-            >
-              Search Now
-            </Button>
-            <Button
-              onClick={clearFilters}
-              variant="outline"
-              size="lg"
-              className="btn-outline btn-lg"
-            >
-              <X className="mr-2 h-4 w-4" />
-              Clear Filters
-            </Button>
           </div>
         </div>
       </div>
+
+      {/* Bottom gradient */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent pointer-events-none" />
     </section>
   );
 }
+

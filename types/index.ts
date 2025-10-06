@@ -148,6 +148,9 @@ export interface Rating {
 // Review Type (alias for Rating, used in gym/trainer pages)
 export type Review = Rating;
 
+// Trainer Type (alias for PersonalTrainer)
+export type Trainer = PersonalTrainer;
+
 // Report Types
 export interface Report {
   id: string;
@@ -208,53 +211,44 @@ export interface PaginatedResponse<T> {
   first: boolean;
 }
 
-// Media Upload Types
-export interface PresignedUrlResponse {
-  uploadUrl: string;
-  fileKey: string;
-  publicUrl: string;
-  expiresIn: number;
-}
-
-// Form Types
-export interface LoginForm {
+// Auth Types
+export interface LoginCredentials {
   email: string;
   password: string;
 }
 
-export interface RegisterForm {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  role: UserRole;
+export interface RegisterData {
   firstName: string;
   lastName: string;
+  email: string;
+  password: string;
+  phoneNumber?: string;
+  role: UserRole;
+  profileImageUrl?: string;
 }
 
-export interface GymForm {
-  name: string;
-  description: string;
-  location: Omit<Location, 'id'>;
-  contactInfo: ContactInfo;
-  amenities: string[];
-  operatingHours: OperatingHours[];
+// Modal Types
+export interface ModalState {
+  isOpen: boolean;
+  type?: 'login' | 'register' | 'profile' | 'search';
 }
 
-export interface PTForm {
-  bio: string;
-  specialties: string[];
-  certifications: string[];
-  experience: number;
-  hourlyRate: number;
-  availability: Omit<Availability, 'id'>[];
+// UI Store Types
+export interface UIState {
+  modal: ModalState;
+  sidebar: {
+    isOpen: boolean;
+  };
+  loading: {
+    [key: string]: boolean;
+  };
 }
 
-export interface OfferForm {
-  type: OfferType;
+// Toast Types
+export interface ToastMessage {
+  id: string;
+  type: 'success' | 'error' | 'info' | 'warning';
   title: string;
-  description: string;
-  price: number;
+  message?: string;
   duration?: number;
-  gymId?: string;
-  ptId?: string;
 }

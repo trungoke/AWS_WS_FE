@@ -350,3 +350,4 @@ export function TrainerFilters({ onSearch }: TrainerFiltersProps) {
     </div>
   );
 }
+

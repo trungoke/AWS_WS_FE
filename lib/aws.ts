@@ -196,3 +196,4 @@ export const mediaUtils = {
     return file.size <= maxSizeInBytes;
   },
 };
+

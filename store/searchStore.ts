@@ -89,8 +89,8 @@ export const useSearchStore = create<SearchState>((set, get) => ({
     set({ isLoading: true, error: null });
     
     try {
-      const response = await api.ptUsers.getAll(searchFilters);
-      
+      const response = await api.pt.getAll(searchFilters);
+
       set({
         searchResults: {
           ...get().searchResults,
@@ -111,7 +111,7 @@ export const useSearchStore = create<SearchState>((set, get) => ({
     set({ isLoading: true, error: null });
     
     try {
-      const response = await api.search.searchOffers(searchFilters);
+      const response = await api.search.offers(searchFilters);
 
       set({
         searchResults: {

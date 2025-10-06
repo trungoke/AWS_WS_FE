@@ -192,3 +192,4 @@ export class MediaUploadService {
 
 // Export singleton instance
 export const mediaUpload = MediaUploadService;
+

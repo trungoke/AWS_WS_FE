@@ -8,19 +8,24 @@ import { OfferCard } from '@/components/offers/OfferCard';
 import { OfferFilters } from '@/components/offers/OfferFilters';
 import { useSearchStore } from '@/store/searchStore';
 import { Offer } from '@/types';
+import { Grid, List, Filter, Tag, Clock, Star, TrendingUp } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import { cn } from '@/lib/utils';
 
-// Mock data - in real app, this would come from API
+// Enhanced mock data với thông tin deal hấp dẫn
 const mockOffers: Offer[] = [
   {
     id: '1',
+    title: 'Black Friday Mega Deal - 70% Off Annual Membership',
+    description: 'Limited time: Get 70% off your first year! Includes access to all premium facilities, group classes, personal training sessions, and exclusive member events. This is our biggest deal of the year!',
     offerType: 'GYM_OFFER',
-    title: 'New Member Special - 50% Off First Month',
-    description: 'Join now and get 50% off your first month membership. Includes access to all facilities and group classes. Perfect for beginners or those looking to try out our gym.',
-    price: 45,
-    currency: 'USD',
-    durationDescription: '30 days',
-    imageUrls: '/api/placeholder/400/300,/api/placeholder/400/300',
     gymId: '1',
+    price: 299,
+    currency: 'USD',
+    durationDescription: '12 months',
+    imageUrls: '/api/placeholder/600/400,/api/placeholder/600/400',
+    averageRating: 4.9,
+    totalRatings: 156,
     isActive: true,
     isApproved: true,
     createdAt: '2024-01-01T00:00:00Z',
@@ -28,78 +33,37 @@ const mockOffers: Offer[] = [
   },
   {
     id: '2',
+    title: 'Personal Training Package - 8 Sessions',
+    description: 'Transform your fitness journey with our expert personal trainers. Package includes 8 one-on-one sessions, nutrition guidance, and custom workout plans.',
     offerType: 'PT_OFFER',
-    title: 'Personal Training Package - 10 Sessions',
-    description: 'Comprehensive personal training package with nutrition guidance and workout plans. Perfect for achieving your fitness goals with expert guidance.',
-    price: 750,
-    currency: 'USD',
-    durationDescription: '10 sessions of 60 minutes',
-    imageUrls: '/api/placeholder/400/300,/api/placeholder/400/300',
     ptUserId: '1',
+    price: 480,
+    currency: 'USD',
+    durationDescription: '8 sessions',
+    imageUrls: '/api/placeholder/600/400',
+    averageRating: 4.8,
+    totalRatings: 89,
     isActive: true,
     isApproved: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
+    createdAt: '2024-01-02T00:00:00Z',
+    updatedAt: '2024-01-02T00:00:00Z',
   },
   {
     id: '3',
+    title: 'Premium Gym Access + Classes',
+    description: 'All-inclusive membership with unlimited access to gym equipment, group fitness classes, sauna, and pool facilities.',
     offerType: 'GYM_OFFER',
-    title: 'Group Fitness Classes - Unlimited Access',
-    description: 'Unlimited access to all group fitness classes including yoga, pilates, and meditation. Great for those who love variety in their workouts.',
-    price: 99,
-    currency: 'USD',
-    durationDescription: '30 days',
-    imageUrls: '/api/placeholder/400/300,/api/placeholder/400/300',
-    gymId: '3',
-    isActive: true,
-    isApproved: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: '4',
-    offerType: 'PT_OFFER',
-    title: 'Yoga & Meditation Sessions',
-    description: 'Holistic approach to fitness with yoga and meditation sessions. Perfect for stress relief and improving flexibility.',
-    price: 60,
-    currency: 'USD',
-    durationDescription: '60 minutes per session',
-    imageUrls: '/api/placeholder/400/300,/api/placeholder/400/300',
-    ptUserId: '3',
-    isActive: true,
-    isApproved: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: '5',
-    offerType: 'GYM_OFFER',
-    title: 'Student Discount - 30% Off Membership',
-    description: 'Special discount for students with valid ID. Includes access to all facilities and group classes at a reduced rate.',
-    price: 62,
-    currency: 'USD',
-    durationDescription: '30 days',
-    imageUrls: '/api/placeholder/400/300,/api/placeholder/400/300',
     gymId: '2',
-    isActive: true,
-    isApproved: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: '6',
-    offerType: 'PT_OFFER',
-    title: 'Strength Training Intensive',
-    description: 'Focused strength training program designed to build muscle and increase power. Includes personalized workout plans and progress tracking.',
-    price: 120,
+    price: 89,
     currency: 'USD',
-    durationDescription: '45 minutes per session',
-    imageUrls: '/api/placeholder/400/300,/api/placeholder/400/300',
-    ptUserId: '2',
+    durationDescription: '1 month',
+    imageUrls: '/api/placeholder/600/400',
+    averageRating: 4.7,
+    totalRatings: 234,
     isActive: true,
     isApproved: true,
-    createdAt: '2024-01-01T00:00:00Z',
-    updatedAt: '2024-01-01T00:00:00Z',
+    createdAt: '2024-01-03T00:00:00Z',
+    updatedAt: '2024-01-03T00:00:00Z',
   },
 ];
 
@@ -111,13 +75,10 @@ export default function OffersPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   useEffect(() => {
-    // In a real app, this would trigger an API call based on search params
     const query = searchParams.get('q');
-    const location = searchParams.get('location');
     const type = searchParams.get('type');
     
-    if (query || location || type) {
-      // Filter mock data based on search params
+    if (query || type) {
       let filteredOffers = mockOffers;
       
       if (query) {
@@ -126,9 +87,6 @@ export default function OffersPage() {
           offer.description.toLowerCase().includes(query.toLowerCase())
         );
       }
-      
-      // Location filtering would require gym/PT data
-      // For now, just use the query filter
 
       if (type) {
         filteredOffers = filteredOffers.filter(offer => 
@@ -141,125 +99,172 @@ export default function OffersPage() {
   }, [searchParams]);
 
   const handleSearch = async (filters: any) => {
-    // In a real app, this would call the API
     await searchOffers(filters);
   };
 
-  const filteredOffers = offers.filter(offer => offer.isActive && offer.isApproved);
+  const getDiscountPercentage = (offer: Offer) => {
+    // Mock discount calculation - in real app this would be based on actual pricing data
+    const mockOriginalPrice = offer.price * 1.5; // Simulate original price
+    return Math.round(((mockOriginalPrice - offer.price) / mockOriginalPrice) * 100);
+  };
+
+  const getSavingsAmount = (offer: Offer) => {
+    // Mock savings calculation
+    const mockOriginalPrice = offer.price * 1.5;
+    return mockOriginalPrice - offer.price;
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       <Header />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Special Offers
-              </h1>
-              <p className="text-lg text-gray-600">
-                Discover amazing deals from gyms and personal trainers
-              </p>
-            </div>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-md ${
-                  viewMode === 'grid' 
-                    ? 'bg-primary-100 text-primary-600' 
-                    : 'text-gray-400 hover:text-gray-600'
-                }`}
-              >
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2 rounded-md ${
-                  viewMode === 'list' 
-                    ? 'bg-primary-100 text-primary-600' 
-                    : 'text-gray-400 hover:text-gray-600'
-                }`}
-              >
-                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </div>
-          </div>
+      {/* Epic Hero Section for Offers */}
+      <section className="relative py-32 bg-black overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 bg-mesh opacity-40" />
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-1/4 w-[700px] h-[700px] bg-red-600/8 rounded-full blur-[180px] animate-float" />
+          <div className="absolute bottom-20 right-1/4 w-[600px] h-[600px] bg-primary-700/10 rounded-full blur-[160px] animate-float" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-primary-800/8 rounded-full blur-[120px] animate-float" style={{ animationDelay: '2s' }} />
         </div>
 
-        {/* Filters and Search */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-900">
-              {filteredOffers.length} offers found
-            </h2>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="btn btn-outline btn-md"
-            >
-              {showFilters ? 'Hide' : 'Show'} Filters
-            </button>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card border border-red-600/50 mb-8 shadow-glow">
+              <Tag className="w-5 h-5 text-red-500 animate-pulse" />
+              <span className="text-sm font-black text-white uppercase tracking-wider">
+                Limited <span className="text-red-400">Time</span> Deals
+              </span>
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+            </div>
+
+            <h1 className="text-6xl md:text-8xl font-black text-white mb-6 tracking-tight">
+              EPIC <span className="text-neon">DEALS</span>
+            </h1>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
+              Don't miss these <span className="text-red-400 font-bold">explosive savings</span> on premium memberships and elite training packages
+            </p>
           </div>
 
-          {showFilters && (
-            <OfferFilters onSearch={handleSearch} />
-          )}
-        </div>
-
-        {/* Results */}
-        {isLoading ? (
-          <div className={`grid gap-6 ${
-            viewMode === 'grid' 
-              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
-              : 'grid-cols-1'
-          }`}>
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-lg p-6 animate-pulse">
-                <div className="h-48 bg-gray-200 rounded mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/2 mb-4"></div>
-                <div className="h-8 bg-gray-200 rounded w-full"></div>
+          {/* Featured Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            {[
+              { icon: Tag, number: 'UP TO 70%', label: 'Savings', color: 'text-red-500' },
+              { icon: Clock, number: '48 HOURS', label: 'Time Left', color: 'text-yellow-500' },
+              { icon: TrendingUp, number: '500+', label: 'Happy Customers', color: 'text-green-500' }
+            ].map((stat, index) => (
+              <div
+                key={index}
+                className="group perspective-1000 animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="glass-card rounded-2xl p-6 text-center shadow-3d group-hover:shadow-neon border border-primary-600/20 group-hover:border-primary-600/40 transform-3d transition-all duration-500 hover:scale-105">
+                  <stat.icon className={`w-8 h-8 ${stat.color} mx-auto mb-3 group-hover:scale-125 transition-transform duration-300`} />
+                  <div className={`text-3xl font-black ${stat.color} mb-1`}>{stat.number}</div>
+                  <div className="text-gray-400 font-bold uppercase tracking-wider text-sm">{stat.label}</div>
+                </div>
               </div>
             ))}
           </div>
-        ) : (
-          <div className={`grid gap-6 ${
-            viewMode === 'grid' 
-              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
-              : 'grid-cols-1'
-          }`}>
-            {filteredOffers.map((offer) => (
-              <OfferCard key={offer.id} offer={offer} viewMode={viewMode} />
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <main className="relative bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+          {/* Controls Bar */}
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12">
+            <div className="flex items-center gap-4">
+              <h2 className="text-2xl font-black text-white">
+                <span className="text-gradient">{offers.length}</span> Hot Deals Available
+              </h2>
+              <div className="glass-card px-4 py-2 rounded-xl border border-red-600/50 shadow-glow">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                  <span className="text-sm text-red-400 font-bold uppercase">Limited Time</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              {/* View Mode Toggle */}
+              <div className="flex rounded-xl glass-card border border-dark-700/50 p-1">
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('grid')}
+                  className="rounded-lg"
+                >
+                  <Grid className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                  className="rounded-lg"
+                >
+                  <List className="w-4 h-4" />
+                </Button>
+              </div>
+
+              {/* Filter Toggle */}
+              <Button
+                variant="outline"
+                onClick={() => setShowFilters(!showFilters)}
+                className="gap-2"
+              >
+                <Filter className="w-4 h-4" />
+                Filters
+              </Button>
+            </div>
+          </div>
+
+          {/* Filters Panel */}
+          {showFilters && (
+            <div className="mb-12 animate-fade-in-up">
+              <OfferFilters onSearch={handleSearch} />
+            </div>
+          )}
+
+          {/* Offers Grid với Epic 3D Effects */}
+          <div className={cn(
+            "gap-8 animate-fade-in-up",
+            viewMode === 'grid'
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+              : "flex flex-col space-y-6"
+          )}>
+            {offers.map((offer, index) => (
+              <div
+                key={offer.id}
+                className="perspective-1000"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <OfferCard
+                  offer={offer}
+                  discount={getDiscountPercentage(offer)}
+                  savings={getSavingsAmount(offer)}
+                />
+              </div>
             ))}
           </div>
-        )}
 
-        {/* No Results */}
-        {!isLoading && filteredOffers.length === 0 && (
-          <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
-              <svg className="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.29-1.009-5.824-2.709M15 6.291A7.962 7.962 0 0012 5c-2.34 0-4.29 1.009-5.824 2.709" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No offers found</h3>
-            <p className="text-gray-600 mb-4">Try adjusting your search criteria or check back later for new offers.</p>
-            <button
-              onClick={() => setShowFilters(true)}
-              className="btn btn-primary"
-            >
-              Adjust Filters
-            </button>
+          {/* Load More Button */}
+          <div className="text-center mt-16 animate-fade-in-up">
+            <Button className="btn-primary btn-lg px-16 py-4 shadow-neon group relative overflow-hidden">
+              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <Tag className="w-5 h-5 mr-3 relative z-10 group-hover:rotate-12 transition-transform duration-300" />
+              <span className="relative z-10 font-black">DISCOVER MORE DEALS</span>
+
+              {/* Epic shine effect */}
+              <div className="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent transform translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+            </Button>
           </div>
-        )}
+        </div>
       </main>
 
       <Footer />
     </div>
   );
 }
+

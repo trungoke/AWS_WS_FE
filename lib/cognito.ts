@@ -188,3 +188,4 @@ export class CognitoService {
 
 // Export singleton instance
 export const cognito = CognitoService;
+
