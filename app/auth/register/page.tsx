@@ -42,12 +42,21 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
+      alert('❌ Passwords do not match!');
+      return;
+    }
+
+    // Validate password strength
+    if (formData.password.length < 8) {
+      alert('❌ Password must be at least 8 characters long!');
       return;
     }
 
     try {
+      console.log('🚀 Starting registration...', { email: formData.email, role: formData.role });
+
       await register({
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -56,9 +65,22 @@ export default function RegisterPage() {
         phoneNumber: formData.phoneNumber,
         role: formData.role,
       });
-      router.push('/dashboard');
-    } catch (error) {
-      console.error('Registration failed:', error);
+
+      console.log('✅ Registration successful!');
+      alert(`✅ Registration successful!\n\nWelcome ${formData.firstName}!\n\nYou will be redirected to your dashboard.`);
+
+      // Small delay for user to see success message
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 1000);
+
+    } catch (error: any) {
+      console.error('❌ Registration failed:', error);
+
+      // Extract error message
+      const errorMessage = error?.response?.data?.message || error?.message || 'Registration failed. Please try again.';
+
+      alert(`❌ Registration Failed!\n\n${errorMessage}\n\nPlease check your information and try again.`);
     }
   };
 
@@ -373,4 +395,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-

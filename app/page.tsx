@@ -1,3 +1,5 @@
+'use client';
+
 import { Hero } from '@/components/landing/Hero';
 import { SearchFilters } from '@/components/landing/SearchFilters';
 import { FeaturedGyms } from '@/components/landing/FeaturedGyms';
@@ -27,4 +29,3 @@ export default function HomePage() {
     </div>
   );
 }
-

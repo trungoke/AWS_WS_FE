@@ -168,9 +168,9 @@ export function DashboardSidebar() {
       </div>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:flex lg:flex-shrink-0">
+      <div className="hidden lg:flex lg:flex-shrink-0 lg:fixed lg:inset-y-0 lg:z-50">
         <div className="flex flex-col w-64">
-          <div className="flex flex-col h-screen bg-gradient-to-b from-gray-900 via-black to-gray-900 border-r border-primary-600/30 relative overflow-hidden">
+          <div className="flex flex-col h-full bg-gradient-to-b from-gray-900 via-black to-gray-900 border-r border-primary-600/30 relative overflow-hidden">
             <div className="absolute inset-0 bg-mesh opacity-10" />
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary-600/5 rounded-full blur-3xl" />
 
@@ -263,4 +263,3 @@ export function DashboardSidebar() {
     </>
   );
 }
-

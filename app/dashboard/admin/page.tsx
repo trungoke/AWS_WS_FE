@@ -64,7 +64,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
+    <div className="bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden min-h-[calc(100vh-4rem)]">
       {/* Epic Background Effects */}
       <div className="absolute inset-0 bg-mesh opacity-20" />
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[150px] animate-float" />
