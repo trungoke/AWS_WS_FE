@@ -19,16 +19,19 @@ import {
 } from 'lucide-react';
 
 export default function DashboardPage() {
-  const { user } = useAuthStore();
+  const { user, isLoading } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
+    // Wait for auth to initialize
+    if (isLoading) return;
+
     if (!user) {
       router.push('/auth/login');
       return;
     }
 
-    // Redirect to role-specific dashboard
+    // Redirect to role-specific dashboard or profile
     switch (user.role) {
       case 'ADMIN':
         router.push('/dashboard/admin');
@@ -40,16 +43,31 @@ export default function DashboardPage() {
         router.push('/dashboard/pt');
         break;
       case 'CLIENT_USER':
+        // Redirect client users to profile page
+        router.push('/profile');
+        break;
       default:
-        // Stay on this page for client users
+        // Stay on this page for unknown roles
         break;
     }
-  }, [user, router]);
+  }, [user, isLoading, router]);
+
+  // Show loading while auth is initializing
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-white text-xl font-bold">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+        <div className="text-white text-xl">Redirecting...</div>
       </div>
     );
   }

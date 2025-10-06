@@ -94,7 +94,12 @@ export const useAuthStore = create<AuthState>()(
         } catch (error) {
           console.error('Logout error:', error);
         } finally {
-          set({ 
+          // Clear token from localStorage
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('auth_token');
+          }
+
+          set({
             user: null, 
             isAuthenticated: false, 
             error: null 
@@ -258,24 +263,37 @@ export const useAuthStore = create<AuthState>()(
       initializeAuth: async () => {
         set({ isLoading: true });
         try {
-          const user = await cognito.getCurrentUser();
-          if (user) {
-            set({ 
-              user, 
-              isAuthenticated: true, 
-              isLoading: false 
-            });
-          } else {
-            set({ 
-              user: null, 
-              isAuthenticated: false, 
-              isLoading: false 
-            });
+          // Check if we have a token in localStorage
+          if (typeof window !== 'undefined') {
+            const token = localStorage.getItem('auth_token');
+
+            if (token) {
+              // Try to get current user from persisted state
+              const { user } = get();
+
+              if (user) {
+                console.log('✅ Restored auth from localStorage:', user.role);
+                set({
+                  user,
+                  isAuthenticated: true,
+                  isLoading: false
+                });
+                return;
+              }
+            }
           }
+
+          // No valid auth found
+          set({
+            user: null,
+            isAuthenticated: false,
+            isLoading: false
+          });
         } catch (error) {
-          set({ 
-            user: null, 
-            isAuthenticated: false, 
+          console.error('Auth initialization error:', error);
+          set({
+            user: null,
+            isAuthenticated: false,
             isLoading: false 
           });
         }

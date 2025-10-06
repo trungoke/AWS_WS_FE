@@ -32,23 +32,37 @@ export default function LoginPage() {
     try {
       await login(formData.email, formData.password);
 
-      // DEBUG: Log user info after login
+      // Get user info after login
       const { user } = useAuthStore.getState();
-      console.log('=== LOGIN DEBUG ===');
-      console.log('User after login:', user);
-      console.log('User role:', user?.role);
-      console.log('User role type:', typeof user?.role);
-      console.log('==================');
+      console.log('✅ Login successful! User role:', user?.role);
 
-      // Alert user info for debugging
+      // Redirect based on user role
       if (user) {
-        alert(`Login successful!\n\nEmail: ${user.email}\nRole: ${user.role}\n\nCheck console for details (F12)`);
+        if (user.role === 'CLIENT_USER') {
+          // Client users go to homepage
+          router.push('/');
+        } else {
+          // Admin, GYM_STAFF, PT_USER go to their respective dashboards
+          switch (user.role) {
+            case 'ADMIN':
+              router.push('/dashboard/admin');
+              break;
+            case 'GYM_STAFF':
+              router.push('/dashboard/gym-staff');
+              break;
+            case 'PT_USER':
+              router.push('/dashboard/pt');
+              break;
+            default:
+              router.push('/dashboard');
+          }
+        }
       }
-
-      router.push('/dashboard');
     } catch (error) {
       console.error('Login failed:', error);
-      alert('Login failed: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      // Show error message in UI instead of alert
+      const errorMessage = error instanceof Error ? error.message : 'Login failed';
+      // You can add a toast notification here or display error in the form
     }
   };
 

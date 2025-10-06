@@ -46,9 +46,19 @@ export function Header() {
         return '/dashboard/gym-staff';
       case 'PT_USER':
         return '/dashboard/pt';
+      case 'CLIENT_USER':
+        return '/profile';
       default:
-        return '/dashboard';
+        return '/profile';
     }
+  };
+
+  const getDashboardLabel = () => {
+    if (!user) return 'Dashboard';
+    if (user.role === 'CLIENT_USER') {
+      return 'Profile';
+    }
+    return 'Dashboard';
   };
 
   return (
@@ -122,7 +132,7 @@ export function Header() {
                 <Link href={getDashboardLink()}>
                   <Button variant="ghost" className="btn-ghost hover:bg-primary-600/10">
                     <User className="w-4 h-4 mr-2" />
-                    {user?.firstName || 'Dashboard'}
+                    {user?.firstName || getDashboardLabel()}
                   </Button>
                 </Link>
                 <Button variant="ghost" className="btn-ghost hover:bg-red-500/10 hover:text-red-500" onClick={handleLogout}>
@@ -211,7 +221,7 @@ export function Header() {
                 <Link href={getDashboardLink()} className="block">
                   <Button variant="ghost" className="w-full justify-start btn-ghost hover:bg-primary-600/10">
                     <User className="w-4 h-4 mr-2" />
-                    {user?.firstName || 'Dashboard'}
+                    {user?.firstName || getDashboardLabel()}
                   </Button>
                 </Link>
                 <Button
@@ -243,4 +253,3 @@ export function Header() {
     </header>
   );
 }
-

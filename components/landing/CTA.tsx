@@ -12,7 +12,16 @@ export function CTA() {
 
   const handleStartJourney = () => {
     if (isAuthenticated) {
-      router.push('/dashboard');
+      // Get user from store to check role
+      const { user } = useAuthStore.getState();
+
+      if (user?.role === 'CLIENT_USER') {
+        // Client users stay on homepage or go to profile
+        router.push('/profile');
+      } else {
+        // Other roles go to dashboard
+        router.push('/dashboard');
+      }
     } else {
       router.push('/auth/register');
     }

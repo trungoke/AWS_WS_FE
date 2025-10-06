@@ -44,18 +44,19 @@ export default function RegisterPage() {
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      alert('❌ Passwords do not match!');
+      // Show error in UI instead of alert
+      console.error('Passwords do not match');
       return;
     }
 
     // Validate password strength
     if (formData.password.length < 8) {
-      alert('❌ Password must be at least 8 characters long!');
+      console.error('Password must be at least 8 characters long');
       return;
     }
 
     try {
-      console.log('🚀 Starting registration...', { email: formData.email, role: formData.role });
+      console.log('Starting registration...');
 
       await register({
         firstName: formData.firstName,
@@ -67,20 +68,35 @@ export default function RegisterPage() {
       });
 
       console.log('✅ Registration successful!');
-      alert(`✅ Registration successful!\n\nWelcome ${formData.firstName}!\n\nYou will be redirected to your dashboard.`);
 
-      // Small delay for user to see success message
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 1000);
+      // Get user to determine redirect
+      const { user } = useAuthStore.getState();
 
+      // Redirect based on user role
+      if (user) {
+        if (user.role === 'CLIENT_USER') {
+          router.push('/');
+        } else {
+          switch (user.role) {
+            case 'ADMIN':
+              router.push('/dashboard/admin');
+              break;
+            case 'GYM_STAFF':
+              router.push('/dashboard/gym-staff');
+              break;
+            case 'PT_USER':
+              router.push('/dashboard/pt');
+              break;
+            default:
+              router.push('/dashboard');
+          }
+        }
+      }
     } catch (error: any) {
-      console.error('❌ Registration failed:', error);
-
-      // Extract error message
+      console.error('Registration failed:', error);
+      // Show error in UI instead of alert
       const errorMessage = error?.response?.data?.message || error?.message || 'Registration failed. Please try again.';
-
-      alert(`❌ Registration Failed!\n\n${errorMessage}\n\nPlease check your information and try again.`);
+      console.error(errorMessage);
     }
   };
 
