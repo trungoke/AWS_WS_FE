@@ -86,9 +86,9 @@ export function DashboardSidebar() {
           <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
             <div className="flex-shrink-0 flex items-center px-4">
               <div className="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">EB</span>
+                <span className="text-white font-bold text-sm">V</span>
               </div>
-              <span className="ml-2 text-xl font-bold text-gray-900">Easy Body</span>
+              <span className="ml-2 text-xl font-bold text-gray-900">Vertex</span>
             </div>
             <nav className="mt-5 px-2 space-y-1">
               {userNavigation.map((item) => {

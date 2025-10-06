@@ -50,7 +50,7 @@ export function Hero() {
           <p className="hero-subtitle max-w-3xl mx-auto animate-slide-up" style={{ animationDelay: '0.2s' }}>
             Discover premium gyms and elite personal trainers near you.
             <br />
-            Start your fitness journey today with <span className="text-primary-500 font-bold">Easy Body</span>
+            Start your fitness journey today with <span className="text-primary-500 font-bold">Vertex</span>
           </p>
 
           {/* Stats */}

@@ -15,8 +15,8 @@ export function Footer() {
                 <Dumbbell className="text-white h-6 w-6" />
               </div>
               <div className="ml-3">
-                <span className="text-2xl font-black text-white">EASY</span>
-                <span className="text-2xl font-black text-primary-500">BODY</span>
+                <span className="text-2xl font-black text-white">VER</span>
+                <span className="text-2xl font-black text-primary-500">TEX</span>
               </div>
             </Link>
             <p className="text-gray-400 text-sm">
@@ -128,7 +128,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-dark-700">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} <span className="text-primary-500 font-bold">Easy Body</span>. All rights reserved.
+              © {new Date().getFullYear()} <span className="text-primary-500 font-bold">Vertex</span>. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link href="/terms" className="text-gray-400 hover:text-primary-500 text-sm transition-colors">

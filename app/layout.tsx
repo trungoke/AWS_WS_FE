@@ -7,7 +7,7 @@ import { Toaster } from 'react-hot-toast';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Easy Body - Find Your Perfect Gym & Personal Trainer',
+  title: 'Vertex - Find Your Perfect Gym & Personal Trainer',
   description: 'A centralized marketplace connecting gyms and personal trainers with clients. Search by location, cost, availability, and ratings.',
   keywords: 'gym, personal trainer, fitness, workout, exercise, health',
   authors: [{ name: 'Easy Body Team' }],

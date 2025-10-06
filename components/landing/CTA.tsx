@@ -25,8 +25,8 @@ export function CTA() {
             <span className="block text-gradient mt-2">YOUR FITNESS GOALS?</span>
           </h2>
 
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-3xl mx-auto font-medium">
-            Join <span className="text-primary-400 font-bold">10,000+</span> warriors who have already started their transformation journey with Easy Body.
+          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+            Join <span className="text-primary-400 font-bold">10,000+</span> warriors who have already started their transformation journey with Vertex.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">

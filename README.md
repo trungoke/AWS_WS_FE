@@ -1,4 +1,4 @@
-# Easy Body - Frontend
+# Vertex - Frontend
 
 A centralized web marketplace connecting gyms and personal trainers with clients. Built with Next.js 14, TypeScript, TailwindCSS, and AWS integration.
 

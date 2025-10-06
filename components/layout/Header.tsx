@@ -62,8 +62,8 @@ export function Header() {
                 <Dumbbell className="text-white h-7 w-7 group-hover:rotate-12 transition-transform" />
               </div>
               <div className="ml-3">
-                <span className="text-2xl font-black text-white tracking-tight">EASY</span>
-                <span className="text-2xl font-black text-primary-500 tracking-tight">BODY</span>
+                <span className="text-2xl font-black text-white tracking-tight">VER</span>
+                <span className="text-2xl font-black text-primary-500 tracking-tight">TEX</span>
               </div>
             </Link>
           </div>
