@@ -29,32 +29,17 @@ import { PersonalTrainer, Review } from '@/types';
 const mockTrainer: PersonalTrainer = {
   id: '1',
   userId: '1',
-  profile: {
-    id: '1',
-    userId: '1',
-    firstName: 'Sarah',
-    lastName: 'Johnson',
-    phone: '(555) 123-4567',
-    email: 'sarah.johnson@example.com',
-    avatar: '/api/placeholder/300/300',
-    bio: 'Certified personal trainer with 8 years of experience helping clients achieve their fitness goals.',
-    location: {
-      id: '1',
-      address: '123 Main St',
-      city: 'New York',
-      state: 'NY',
-      zipCode: '10001',
-      latitude: 40.7128,
-      longitude: -74.0060,
-    },
-  },
+  firstName: 'Sarah',
+  lastName: 'Johnson',
+  phoneNumber: '(555) 123-4567',
+  profileImageUrl: '/api/placeholder/300/300',
   bio: 'Passionate about helping clients achieve their fitness goals through personalized training programs. I specialize in weight loss, strength training, and nutrition guidance. With over 8 years of experience, I\'ve helped hundreds of clients transform their lives and reach their health and fitness goals.',
   specialties: ['Weight Loss', 'Strength Training', 'Nutrition', 'Cardio Training', 'Bodybuilding'],
   certifications: ['NASM-CPT', 'Precision Nutrition', 'CPR/AED', 'First Aid'],
   experience: 8,
   hourlyRate: 85,
-  rating: 4.9,
-  reviewCount: 87,
+  averageRating: 4.9,
+  totalRatings: 87,
   availability: [
     { id: '1', dayOfWeek: 1, startTime: '06:00', endTime: '20:00', isAvailable: true },
     { id: '2', dayOfWeek: 2, startTime: '06:00', endTime: '20:00', isAvailable: true },
@@ -74,33 +59,27 @@ const mockReviews: Review[] = [
   {
     id: '1',
     userId: '1',
-    targetId: '1',
-    targetType: 'PT',
+    offerId: '1',
     rating: 5,
     comment: 'Sarah is an amazing trainer! She helped me lose 30 pounds and completely transformed my lifestyle. Her approach is personalized and she really cares about her clients\' success.',
-    isVerified: true,
     createdAt: '2024-01-15T10:30:00Z',
     updatedAt: '2024-01-15T10:30:00Z',
   },
   {
     id: '2',
     userId: '2',
-    targetId: '1',
-    targetType: 'PT',
+    offerId: '1',
     rating: 5,
     comment: 'Professional, knowledgeable, and motivating. Sarah\'s nutrition guidance was particularly helpful. I\'ve seen incredible results in just 3 months!',
-    isVerified: true,
     createdAt: '2024-01-10T14:20:00Z',
     updatedAt: '2024-01-10T14:20:00Z',
   },
   {
     id: '3',
     userId: '3',
-    targetId: '1',
-    targetType: 'PT',
+    offerId: '1',
     rating: 4,
     comment: 'Great trainer with a lot of experience. The workouts are challenging but fun. Highly recommend for anyone serious about their fitness goals.',
-    isVerified: true,
     createdAt: '2024-01-05T09:15:00Z',
     updatedAt: '2024-01-05T09:15:00Z',
   },
@@ -127,7 +106,7 @@ export default function TrainerDetailPage() {
     fetchTrainer();
   }, [params.id]);
 
-  const formatAvailability = (availability: typeof trainer.availability) => {
+  const formatAvailability = (availability: PersonalTrainer['availability']) => {
     const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     return availability.map(avail => ({
       day: dayNames[avail.dayOfWeek],
@@ -138,13 +117,15 @@ export default function TrainerDetailPage() {
 
   const handleContact = () => {
     // In a real app, this would open a contact modal or redirect to contact form
-    window.location.href = `tel:${trainer?.profile.phone}`;
+    if (trainer?.phoneNumber) {
+      window.location.href = `tel:${trainer.phoneNumber}`;
+    }
   };
 
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: `${trainer?.profile.firstName} ${trainer?.profile.lastName} - Personal Trainer`,
+        title: `${trainer?.firstName} ${trainer?.lastName} - Personal Trainer`,
         text: trainer?.bio,
         url: window.location.href,
       });
@@ -184,9 +165,9 @@ export default function TrainerDetailPage() {
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Trainer not found</h1>
             <p className="text-gray-600 mb-8">The trainer you're looking for doesn't exist or has been removed.</p>
-            <Button asChild>
-              <Link href="/trainers">Browse All Trainers</Link>
-            </Button>
+            <Link href="/trainers" className="btn btn-primary">
+              Browse All Trainers
+            </Link>
           </div>
         </div>
         <Footer />
@@ -205,8 +186,8 @@ export default function TrainerDetailPage() {
             <div className="flex items-start space-x-6">
               <div className="w-24 h-24 rounded-full overflow-hidden">
                 <Image
-                  src={trainer.profile.avatar || '/api/placeholder/300/300'}
-                  alt={`${trainer.profile.firstName} ${trainer.profile.lastName}`}
+                  src={trainer.profileImageUrl || '/api/placeholder/300/300'}
+                  alt={`${trainer.firstName} ${trainer.lastName}`}
                   width={96}
                   height={96}
                   className="w-full h-full object-cover"
@@ -214,23 +195,15 @@ export default function TrainerDetailPage() {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                  {trainer.profile.firstName} {trainer.profile.lastName}
+                  {trainer.firstName} {trainer.lastName}
                 </h1>
                 <p className="text-lg text-gray-600 mb-2">
                   Personal Trainer • {trainer.experience} years experience
                 </p>
-                {trainer.profile.location && (
-                  <div className="flex items-center text-gray-600 mb-2">
-                    <MapPin className="h-4 w-4 mr-1" />
-                    <span>
-                      {trainer.profile.location.city}, {trainer.profile.state}
-                    </span>
-                  </div>
-                )}
                 <div className="flex items-center text-yellow-500">
                   <Star className="h-5 w-5 fill-current" />
-                  <span className="ml-1 text-lg font-medium">{trainer.rating}</span>
-                  <span className="ml-1 text-gray-500">({trainer.reviewCount} reviews)</span>
+                  <span className="ml-1 text-lg font-medium">{trainer.averageRating}</span>
+                  <span className="ml-1 text-gray-500">({trainer.totalRatings} reviews)</span>
                 </div>
               </div>
             </div>
@@ -257,11 +230,10 @@ export default function TrainerDetailPage() {
             {/* About */}
             <Card>
               <CardHeader>
-                <CardTitle>About {trainer.profile.firstName}</CardTitle>
+                <CardTitle>About {trainer.firstName}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 leading-relaxed mb-4">{trainer.bio}</p>
-                <p className="text-gray-600 leading-relaxed">{trainer.profile.bio}</p>
+                <p className="text-gray-600 leading-relaxed">{trainer.bio}</p>
               </CardContent>
             </Card>
 
@@ -302,7 +274,7 @@ export default function TrainerDetailPage() {
             {/* Reviews */}
             <Card>
               <CardHeader>
-                <CardTitle>Reviews ({trainer.reviewCount})</CardTitle>
+                <CardTitle>Reviews ({trainer.totalRatings})</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -320,11 +292,6 @@ export default function TrainerDetailPage() {
                               />
                             ))}
                           </div>
-                          {review.isVerified && (
-                            <Badge variant="success" className="ml-2 text-xs">
-                              Verified
-                            </Badge>
-                          )}
                         </div>
                         <span className="text-sm text-gray-500">
                           {new Date(review.createdAt).toLocaleDateString()}
@@ -352,18 +319,14 @@ export default function TrainerDetailPage() {
                   </div>
                   <div className="text-gray-500">per hour</div>
                 </div>
-                <Button asChild className="w-full mb-3">
-                  <Link href={`/trainers/${trainer.id}/book`}>
-                    <Calendar className="h-4 w-4 mr-2" />
-                    Book a Session
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="w-full">
-                  <Link href={`/trainers/${trainer.id}/packages`}>
-                    <DollarSign className="h-4 w-4 mr-2" />
-                    View Packages
-                  </Link>
-                </Button>
+                <Link href={`/trainers/${trainer.id}/book`} className="btn btn-primary w-full mb-3 flex items-center justify-center">
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Book a Session
+                </Link>
+                <Link href={`/trainers/${trainer.id}/packages`} className="btn btn-outline w-full flex items-center justify-center">
+                  <DollarSign className="h-4 w-4 mr-2" />
+                  View Packages
+                </Link>
               </CardContent>
             </Card>
 
@@ -373,25 +336,14 @@ export default function TrainerDetailPage() {
                 <CardTitle>Contact Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {trainer.profile.phone && (
+                {trainer.phoneNumber && (
                   <div className="flex items-center">
                     <Phone className="h-4 w-4 text-gray-400 mr-3" />
                     <a
-                      href={`tel:${trainer.profile.phone}`}
+                      href={`tel:${trainer.phoneNumber}`}
                       className="text-primary-600 hover:text-primary-700"
                     >
-                      {trainer.profile.phone}
-                    </a>
-                  </div>
-                )}
-                {trainer.profile.email && (
-                  <div className="flex items-center">
-                    <Mail className="h-4 w-4 text-gray-400 mr-3" />
-                    <a
-                      href={`mailto:${trainer.profile.email}`}
-                      className="text-primary-600 hover:text-primary-700"
-                    >
-                      {trainer.profile.email}
+                      {trainer.phoneNumber}
                     </a>
                   </div>
                 )}
@@ -435,11 +387,9 @@ export default function TrainerDetailPage() {
                       {trainer.attachedGyms.length} gym{trainer.attachedGyms.length !== 1 ? 's' : ''}
                     </span>
                   </div>
-                  <Button asChild variant="outline" className="w-full">
-                    <Link href={`/trainers/${trainer.id}/gyms`}>
-                      View Gyms
-                    </Link>
-                  </Button>
+                  <Link href={`/trainers/${trainer.id}/gyms`} className="btn btn-outline w-full">
+                    View Gyms
+                  </Link>
                 </div>
               </CardContent>
             </Card>

@@ -14,31 +14,17 @@ const mockTrainers: PersonalTrainer[] = [
   {
     id: '1',
     userId: '1',
-    profile: {
-      id: '1',
-      userId: '1',
-      firstName: 'Sarah',
-      lastName: 'Johnson',
-      phone: '(555) 123-4567',
-      avatar: '/api/placeholder/200/200',
-      bio: 'Certified personal trainer with 8 years of experience helping clients achieve their fitness goals.',
-      location: {
-        id: '1',
-        address: '123 Main St',
-        city: 'New York',
-        state: 'NY',
-        zipCode: '10001',
-        latitude: 40.7128,
-        longitude: -74.0060,
-      },
-    },
+    firstName: 'Sarah',
+    lastName: 'Johnson',
+    phoneNumber: '(555) 123-4567',
+    profileImageUrl: '/api/placeholder/200/200',
     bio: 'Passionate about helping clients achieve their fitness goals through personalized training programs. I specialize in weight loss, strength training, and nutrition guidance.',
     specialties: ['Weight Loss', 'Strength Training', 'Nutrition', 'Cardio Training'],
     certifications: ['NASM-CPT', 'Precision Nutrition', 'CPR/AED'],
     experience: 8,
     hourlyRate: 85,
-    rating: 4.9,
-    reviewCount: 87,
+    averageRating: 4.9,
+    totalRatings: 87,
     availability: [
       { id: '1', dayOfWeek: 1, startTime: '06:00', endTime: '20:00', isAvailable: true },
       { id: '2', dayOfWeek: 2, startTime: '06:00', endTime: '20:00', isAvailable: true },
@@ -56,31 +42,17 @@ const mockTrainers: PersonalTrainer[] = [
   {
     id: '2',
     userId: '2',
-    profile: {
-      id: '2',
-      userId: '2',
-      firstName: 'Mike',
-      lastName: 'Chen',
-      phone: '(555) 987-6543',
-      avatar: '/api/placeholder/200/200',
-      bio: 'Former competitive athlete with expertise in sports-specific training and performance optimization.',
-      location: {
-        id: '2',
-        address: '456 Oak Ave',
-        city: 'Los Angeles',
-        state: 'CA',
-        zipCode: '90210',
-        latitude: 34.0522,
-        longitude: -118.2437,
-      },
-    },
+    firstName: 'Mike',
+    lastName: 'Chen',
+    phoneNumber: '(555) 987-6543',
+    profileImageUrl: '/api/placeholder/200/200',
     bio: 'Former competitive athlete with 12 years of experience in strength and conditioning. I specialize in athletic performance, Olympic lifting, and injury prevention.',
     specialties: ['Athletic Performance', 'Olympic Lifting', 'Injury Prevention', 'Sports Training'],
     certifications: ['CSCS', 'USAW Level 1', 'FMS Level 1'],
     experience: 12,
     hourlyRate: 95,
-    rating: 4.7,
-    reviewCount: 64,
+    averageRating: 4.7,
+    totalRatings: 64,
     availability: [
       { id: '8', dayOfWeek: 1, startTime: '05:00', endTime: '19:00', isAvailable: true },
       { id: '9', dayOfWeek: 2, startTime: '05:00', endTime: '19:00', isAvailable: true },
@@ -98,31 +70,17 @@ const mockTrainers: PersonalTrainer[] = [
   {
     id: '3',
     userId: '3',
-    profile: {
-      id: '3',
-      userId: '3',
-      firstName: 'Emma',
-      lastName: 'Rodriguez',
-      phone: '(555) 456-7890',
-      avatar: '/api/placeholder/200/200',
-      bio: 'Holistic approach to fitness focusing on mind-body connection and sustainable wellness practices.',
-      location: {
-        id: '3',
-        address: '789 Pine St',
-        city: 'San Francisco',
-        state: 'CA',
-        zipCode: '94102',
-        latitude: 37.7749,
-        longitude: -122.4194,
-      },
-    },
+    firstName: 'Emma',
+    lastName: 'Rodriguez',
+    phoneNumber: '(555) 456-7890',
+    profileImageUrl: '/api/placeholder/200/200',
     bio: 'Holistic approach to fitness focusing on mind-body connection and sustainable wellness practices. I specialize in yoga, pilates, meditation, and stress management.',
     specialties: ['Yoga', 'Pilates', 'Meditation', 'Stress Management', 'Flexibility'],
     certifications: ['RYT-500', 'PMA-CPT', 'Yin Yoga Certification'],
     experience: 6,
     hourlyRate: 75,
-    rating: 4.8,
-    reviewCount: 92,
+    averageRating: 4.8,
+    totalRatings: 92,
     availability: [
       { id: '15', dayOfWeek: 1, startTime: '07:00', endTime: '19:00', isAvailable: true },
       { id: '16', dayOfWeek: 2, startTime: '07:00', endTime: '19:00', isAvailable: true },
@@ -156,8 +114,8 @@ export default function TrainersPage() {
       
       if (query) {
         filteredTrainers = filteredTrainers.filter(trainer => 
-          trainer.profile.firstName.toLowerCase().includes(query.toLowerCase()) ||
-          trainer.profile.lastName.toLowerCase().includes(query.toLowerCase()) ||
+          trainer.firstName.toLowerCase().includes(query.toLowerCase()) ||
+          trainer.lastName.toLowerCase().includes(query.toLowerCase()) ||
           trainer.bio.toLowerCase().includes(query.toLowerCase()) ||
           trainer.specialties.some(specialty => 
             specialty.toLowerCase().includes(query.toLowerCase())
@@ -165,13 +123,9 @@ export default function TrainersPage() {
         );
       }
       
-      if (location) {
-        filteredTrainers = filteredTrainers.filter(trainer => 
-          trainer.profile.location?.city.toLowerCase().includes(location.toLowerCase()) ||
-          trainer.profile.location?.state.toLowerCase().includes(location.toLowerCase())
-        );
-      }
-      
+      // Location filtering would require additional location data
+      // For now, just use the query filter
+
       setTrainers(filteredTrainers);
     }
   }, [searchParams]);

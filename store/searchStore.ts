@@ -72,7 +72,7 @@ export const useSearchStore = create<SearchState>((set, get) => ({
       set({
         searchResults: {
           ...get().searchResults,
-          gyms: response.data || defaultSearchResult
+          gyms: (response.data as SearchResult<Gym>) || defaultSearchResult
         },
         isLoading: false,
       });
@@ -94,7 +94,7 @@ export const useSearchStore = create<SearchState>((set, get) => ({
       set({
         searchResults: {
           ...get().searchResults,
-          trainers: response.data || defaultSearchResult
+          trainers: (response.data as SearchResult<PersonalTrainer>) || defaultSearchResult
         },
         isLoading: false,
       });
@@ -111,12 +111,12 @@ export const useSearchStore = create<SearchState>((set, get) => ({
     set({ isLoading: true, error: null });
     
     try {
-      const response = await api.search.offers(searchFilters, true);
-      
+      const response = await api.search.searchOffers(searchFilters);
+
       set({
         searchResults: {
           ...get().searchResults,
-          offers: response.data || defaultSearchResult
+          offers: (response.data as SearchResult<Offer>) || defaultSearchResult
         },
         isLoading: false,
       });

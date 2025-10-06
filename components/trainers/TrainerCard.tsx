@@ -37,8 +37,8 @@ export function TrainerCard({ trainer }: TrainerCardProps) {
           <div className="flex-shrink-0">
             <div className="w-16 h-16 rounded-full overflow-hidden">
               <Image
-                src={trainer.profile.avatar || '/api/placeholder/200/200'}
-                alt={`${trainer.profile.firstName} ${trainer.profile.lastName}`}
+                src={trainer.profileImageUrl || '/api/placeholder/200/200'}
+                alt={`${trainer.firstName} ${trainer.lastName}`}
                 width={64}
                 height={64}
                 className="w-full h-full object-cover"
@@ -51,7 +51,7 @@ export function TrainerCard({ trainer }: TrainerCardProps) {
             <div className="flex items-start justify-between mb-2">
               <div>
                 <h3 className="text-xl font-semibold text-gray-900">
-                  {trainer.profile.firstName} {trainer.profile.lastName}
+                  {trainer.firstName} {trainer.lastName}
                 </h3>
                 <p className="text-sm text-gray-600 mb-1">
                   {trainer.experience} years experience
@@ -59,20 +59,10 @@ export function TrainerCard({ trainer }: TrainerCardProps) {
               </div>
               <div className="flex items-center text-yellow-500">
                 <Star className="h-4 w-4 fill-current" />
-                <span className="ml-1 text-sm font-medium">{trainer.rating}</span>
-                <span className="ml-1 text-sm text-gray-500">({trainer.reviewCount})</span>
+                <span className="ml-1 text-sm font-medium">{trainer.averageRating}</span>
+                <span className="ml-1 text-sm text-gray-500">({trainer.totalRatings})</span>
               </div>
             </div>
-
-            {/* Location */}
-            {trainer.profile.location && (
-              <div className="flex items-center text-gray-600 mb-2">
-                <MapPin className="h-4 w-4 mr-1" />
-                <span className="text-sm">
-                  {trainer.profile.location.city}, {trainer.profile.location.state}
-                </span>
-              </div>
-            )}
 
             {/* Availability */}
             <div className="flex items-center text-gray-600 mb-3">
@@ -105,49 +95,28 @@ export function TrainerCard({ trainer }: TrainerCardProps) {
             </div>
 
             {/* Certifications */}
-            <div className="mb-4">
-              <div className="flex items-center mb-2">
-                <Award className="h-4 w-4 text-gray-400 mr-1" />
-                <span className="text-sm font-medium text-gray-700">Certifications:</span>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                {trainer.certifications.map((cert) => (
-                  <Badge key={cert} variant="primary" className="text-xs">
-                    {cert}
-                  </Badge>
-                ))}
-              </div>
+            <div className="flex items-center text-gray-600 mb-4">
+              <Award className="h-4 w-4 mr-1" />
+              <span className="text-sm">{trainer.certifications.length} certifications</span>
             </div>
 
-            {/* Actions */}
+            {/* Footer */}
             <div className="flex items-center justify-between">
+              <div className="text-2xl font-bold text-primary-600">
+                ${trainer.hourlyRate}/hr
+              </div>
               <div className="flex space-x-2">
+                <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                  <Heart className="h-4 w-4 text-gray-600" />
+                </button>
                 <Link href={`/trainers/${trainer.id}`}>
-                  <Button variant="outline" size="sm">
+                  <Button size="sm">
+                    <Calendar className="h-4 w-4 mr-1" />
                     View Profile
                   </Button>
                 </Link>
-                <Link href={`/trainers/${trainer.id}/book`}>
-                  <Button size="sm">
-                    <Calendar className="h-4 w-4 mr-1" />
-                    Book Session
-                  </Button>
-                </Link>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-primary-600">
-                  ${trainer.hourlyRate}
-                  <span className="text-sm font-normal text-gray-500">/hour</span>
-                </div>
               </div>
             </div>
-          </div>
-
-          {/* Favorite Button */}
-          <div className="flex-shrink-0">
-            <button className="p-2 text-gray-400 hover:text-red-500 transition-colors">
-              <Heart className="h-5 w-5" />
-            </button>
           </div>
         </div>
       </div>

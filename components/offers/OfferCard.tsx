@@ -28,17 +28,8 @@ export function OfferCard({ offer, viewMode }: OfferCardProps) {
     }).format(price);
   };
 
-  const formatDuration = (duration?: number) => {
-    if (!duration) return '';
-    if (duration < 60) return `${duration} min`;
-    const hours = Math.floor(duration / 60);
-    const minutes = duration % 60;
-    if (minutes === 0) return `${hours}h`;
-    return `${hours}h ${minutes}m`;
-  };
-
   const getOfferTypeIcon = () => {
-    return offer.type === 'GYM_OFFER' ? (
+    return offer.offerType === 'GYM_OFFER' ? (
       <Building2 className="h-4 w-4" />
     ) : (
       <User className="h-4 w-4" />
@@ -46,8 +37,10 @@ export function OfferCard({ offer, viewMode }: OfferCardProps) {
   };
 
   const getOfferTypeLabel = () => {
-    return offer.type === 'GYM_OFFER' ? 'Gym Offer' : 'Personal Trainer';
+    return offer.offerType === 'GYM_OFFER' ? 'Gym Offer' : 'Personal Trainer';
   };
+
+  const images = offer.imageUrls ? offer.imageUrls.split(',') : [];
 
   if (viewMode === 'list') {
     return (
@@ -57,7 +50,7 @@ export function OfferCard({ offer, viewMode }: OfferCardProps) {
           <div className="md:w-80 flex-shrink-0">
             <div className="relative h-48 md:h-full">
               <Image
-                src={offer.images[0] || '/api/placeholder/400/300'}
+                src={images[0] || '/api/placeholder/400/300'}
                 alt={offer.title}
                 fill
                 className="object-cover"
@@ -92,17 +85,10 @@ export function OfferCard({ offer, viewMode }: OfferCardProps) {
               {offer.title}
             </h3>
 
-            <div className="flex items-center text-gray-600 mb-2">
-              <MapPin className="h-4 w-4 mr-1" />
-              <span className="text-sm">
-                {offer.location.city}, {offer.location.state}
-              </span>
-            </div>
-
-            {offer.duration && (
+            {offer.durationDescription && (
               <div className="flex items-center text-gray-600 mb-3">
                 <Clock className="h-4 w-4 mr-1" />
-                <span className="text-sm">{formatDuration(offer.duration)}</span>
+                <span className="text-sm">{offer.durationDescription}</span>
               </div>
             )}
 
@@ -113,11 +99,9 @@ export function OfferCard({ offer, viewMode }: OfferCardProps) {
             <div className="flex items-center justify-between">
               <div className="text-2xl font-bold text-primary-600">
                 {formatPrice(offer.price)}
-                {offer.duration && (
-                  <span className="text-sm font-normal text-gray-500">
-                    /{offer.duration < 60 ? 'session' : 'package'}
-                  </span>
-                )}
+                <span className="text-sm font-normal text-gray-500 ml-1">
+                  {offer.currency || 'USD'}
+                </span>
               </div>
               <Link href={`/offers/${offer.id}`}>
                 <Button>View Offer</Button>
@@ -134,7 +118,7 @@ export function OfferCard({ offer, viewMode }: OfferCardProps) {
       <div className="relative">
         <div className="aspect-w-16 aspect-h-9">
           <Image
-            src={offer.images[0] || '/api/placeholder/400/300'}
+            src={images[0] || '/api/placeholder/400/300'}
             alt={offer.title}
             fill
             className="object-cover"
@@ -166,17 +150,10 @@ export function OfferCard({ offer, viewMode }: OfferCardProps) {
           {offer.title}
         </h3>
 
-        <div className="flex items-center text-gray-600 mb-2">
-          <MapPin className="h-4 w-4 mr-1" />
-          <span className="text-sm">
-            {offer.location.city}, {offer.location.state}
-          </span>
-        </div>
-
-        {offer.duration && (
+        {offer.durationDescription && (
           <div className="flex items-center text-gray-600 mb-3">
             <Clock className="h-4 w-4 mr-1" />
-            <span className="text-sm">{formatDuration(offer.duration)}</span>
+            <span className="text-sm">{offer.durationDescription}</span>
           </div>
         )}
 
@@ -189,11 +166,9 @@ export function OfferCard({ offer, viewMode }: OfferCardProps) {
             <div className="text-2xl font-bold text-primary-600">
               {formatPrice(offer.price)}
             </div>
-            {offer.duration && (
-              <div className="text-sm text-gray-500">
-                per {offer.duration < 60 ? 'session' : 'package'}
-              </div>
-            )}
+            <div className="text-sm text-gray-500">
+              {offer.currency || 'USD'}
+            </div>
           </div>
           <Link href={`/offers/${offer.id}`}>
             <Button>View Offer</Button>

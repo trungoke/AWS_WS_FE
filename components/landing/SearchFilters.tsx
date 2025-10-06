@@ -80,13 +80,13 @@ export function SearchFilters({ className = '' }: SearchFiltersProps) {
         if (key === 'availability') {
           Object.entries(value).forEach(([subKey, subValue]) => {
             if (subValue && subValue !== '') {
-              params.set(`availability.${subKey}`, subValue);
+              params.set(`availability.${subKey}`, String(subValue));
             }
           });
         } else if (Array.isArray(value) && value.length > 0) {
           params.set(key, value.join(','));
-        } else if (!Array.isArray(value)) {
-          params.set(key, value);
+        } else if (!Array.isArray(value) && typeof value !== 'object') {
+          params.set(key, String(value));
         }
       }
     });

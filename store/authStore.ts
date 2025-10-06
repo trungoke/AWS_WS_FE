@@ -166,8 +166,8 @@ export const useAuthStore = create<AuthState>()(
       resetPassword: async (email: string, code: string, newPassword: string) => {
         set({ isLoading: true, error: null });
         try {
-          const result = await cognito.resetPassword(email, code, newPassword);
-          
+          const result = await cognito.forgotPasswordSubmit(email, code, newPassword);
+
           if (result.success) {
             set({ 
               isLoading: false,
