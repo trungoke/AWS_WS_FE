@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Construction, ArrowLeft } from 'lucide-react';
@@ -38,4 +37,7 @@ export default function ComingSoonPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
 
